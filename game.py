@@ -31,9 +31,13 @@ class Player:
 
 def main():
     nicky = Player('Nicky')
-    #print('The first fixture is ') + week_1
+    #print(f'The first fixture is {home} vs {away}')
     for game in week_1:
-        question_1 = Question('West Ham', 'Everton', 3)
+        home = game['teams'][0]
+        away = game['teams'][1]
+        result = game['result']
+        #question_1 = Question({home}, {away}, {result})
+        question_1 = Question(home, away, result)
         question_1.fixture()
         nicky.prediction()
         print(f'The correct answer is {question_1.correct}')
