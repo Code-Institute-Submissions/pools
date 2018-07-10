@@ -1,3 +1,24 @@
+season = [[
+    {'game': 1,
+     'teams':['West Ham', 'Everton'],
+     'result': 1},
+    {'game': 2,
+     'teams':['Spurs', 'Leicester'],
+     'result': 1},
+    {'game': 3,
+     'teams':['Swansea', 'Stoke'],
+     'result': 3}],
+[
+    {'game': 1,
+     'teams':['Man Utd', 'Man City'],
+     'result': 3},
+    {'game': 2,
+     'teams':['Liverpool', 'Brighton'],
+     'result': 2},
+    {'game': 3,
+     'teams':['Chelsea', 'Newcastle'],
+     'result': 1}]]
+
 week_1 = [
     {'game': 1,
      'teams':['West Ham', 'Everton'],
@@ -37,6 +58,10 @@ def ansConv(guess):
         ansStr = 'Away Win'
     return ansStr
 
+def calcWinner(*players):
+    #for player in players:
+    print('Hi Nicky')
+
 
 def main():
     players = []
@@ -46,32 +71,34 @@ def main():
         player = Player(f'Player {player+1}')
         players.append(player)
 
-
     print('Enter 1 for a Home Win, 2 for a Draw or 3 for an Away Win')
     print('---------------')
-    for game in week_1:
-        num = game['game']
-        home = game['teams'][0]
-        away = game['teams'][1]
-        result = game['result']
-        question = Question(home, away, result)
-        print(f'Game {num}')
-        question.fixture()
-        for player in players:
-            player.prediction()
-            #print(f'The correct prediction is {ansConv(question.correct)}')
-            print(f'You guessed: {ansConv(player.answer)}')
-            if player.answer == question.correct:
-                print('Correct prediction!')
-                player.score += player.answer
-            else:
-                print('Incorrect prediction!')
-            print('---------------')
+    wk_count = 1
+    for week in season:
+        for game in week:
+            num = game['game']
+            home = game['teams'][0]
+            away = game['teams'][1]
+            result = game['result']
+            question = Question(home, away, result)
+            print(f'Week {wk_count} Game {num}')
+            question.fixture()
+            for player in players:
+                player.prediction()
+                #print(f'The correct prediction is {ansConv(question.correct)}')
+                print(f'You guessed: {ansConv(player.answer)}')
+                if player.answer == question.correct:
+                    print('Correct prediction!')
+                    player.score += player.answer
+                else:
+                    print('Incorrect prediction!')
+                print('---------------')
+        wk_count += 1
+
+    players.sort(key=lambda x: x.score, reverse=True)
 
     for player in players:
         print(f'{player.name} scored {player.score} points.')
-
-
 
 
 main()
