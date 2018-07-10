@@ -25,7 +25,7 @@ class Player:
         self.score = score
 
     def prediction(self):
-        answer = input('Enter your prediction.. ')
+        answer = input(f'Enter your prediction {self.name}.. ')
         self.answer = int(answer)
 
 def ansConv(guess):
@@ -35,18 +35,18 @@ def ansConv(guess):
         ansStr = 'Draw'
     else:
         ansStr = 'Away Win'
-
     return ansStr
 
 
 def main():
     players = []
     num_players = input('Please enter number of players..')
+    #Create list of player objects
     for player in range(int(num_players)):
-        #print(f'Player {player +1} created')
         player = Player(f'Player {player+1}')
         players.append(player)
-    nicky = Player('Nicky')
+
+
     print('Enter 1 for a Home Win, 2 for a Draw or 3 for an Away Win')
     print('---------------')
     for game in week_1:
@@ -57,17 +57,21 @@ def main():
         question = Question(home, away, result)
         print(f'Game {num}')
         question.fixture()
-        nicky.prediction()
-        print(f'The correct answer is {ansConv(question.correct)}')
-        print(f'You guessed: {ansConv(nicky.answer)}')
-        if nicky.answer == question.correct:
-            print('You guessed correct')
-            nicky.score += nicky.answer
-        else:
-            print('Wrong answer')
-        print('---------------')
+        for player in players:
+            player.prediction()
+            #print(f'The correct prediction is {ansConv(question.correct)}')
+            print(f'You guessed: {ansConv(player.answer)}')
+            if player.answer == question.correct:
+                print('Correct prediction!')
+                player.score += player.answer
+            else:
+                print('Incorrect prediction!')
+            print('---------------')
 
-    print(f'You scored {nicky.score}')
+    for player in players:
+        print(f'{player.name} scored {player.score} points.')
+
+
 
 
 main()
