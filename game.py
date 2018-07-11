@@ -29,7 +29,8 @@ season = [[
      'teams':['Alaves', 'Espanyol'],
      'result': 1}]]
 
-
+# Question class used for creating a question instance containing 2 teams denoted as home and away
+# fixture method used for constructing the question
 class Question:
     def __init__(self, home, away, correct):
         self.home = home
@@ -39,7 +40,8 @@ class Question:
     def fixture(self):
         print(f'{self.home} vs {self.away}')
 
-
+# Player class for creating instance of a player with a name and their scored
+# Player can make a prediction of the score of games
 class Player:
     def __init__(self, name='', score=0, answer=0):
         self.name = name
@@ -49,7 +51,7 @@ class Player:
         answer = input(f'Enter your prediction {self.name}.. ')
         self.answer = int(answer)
 
-# Function to convert guess to string
+# Function to convert guess input to string
 def ansConv(guess):
     if guess == 1:
         ansStr = 'Home Win'
@@ -65,11 +67,14 @@ def calcWinner(*players):
 
 
 def main():
+    # initialize empty list to store player objects
     players = []
     max_players = 10
+    # Prompt for number of players
     num_players = input('Please enter number of players..')
+    # Prompt for number of weeks/length of game
     num_weeks = int(input('Please enter number of weeks you would like to play..'))
-    #Create list of player objects
+    #Create player objects
     for player in range(int(num_players)):
         player = Player(f'Player {player+1}')
         players.append(player)
@@ -80,6 +85,7 @@ def main():
     wk_num = 1
     # count used to keep track of current week
     count = 0
+    # Traverse season Data Structure to evaluate player input
     for week in season:
         # while loop used to play as many weeks selected by user
         while count < num_weeks:
