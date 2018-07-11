@@ -61,9 +61,13 @@ def ansConv(guess):
         ansStr = 'Away Win'
     return ansStr
 
-def calcWinner(*players):
-    #for player in players:
-    print('Hi Nicky')
+# Function to calculate if there is a winner.  It only needs the top 2 sorted player objects.
+# If these 2 scores are equal then its a draw and any remaining players dont matter
+def calcWinner(playerA, playerB):
+    if playerA.score > playerB.score:
+        print(f'{playerA.name} is the winner!')
+    else:
+        print('Game has finished in a draw!')
 
 
 def main():
@@ -110,11 +114,16 @@ def main():
             wk_num += 1
             count += 1
 
-    #Sort players by score
+    # Sort players by score
     players.sort(key=lambda x: x.score, reverse=True)
 
+    # Print player leaderboard
     for player in players:
         print(f'{player.name} scored {player.score} points.')
+        print('---------------')
+
+    # Use calcWinner function on sorted player list to establish draw or winner
+    calcWinner(players[0], players[1])
 
 
 main()
