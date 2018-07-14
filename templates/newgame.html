@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% block content %}
+      <div class="newgameform">
+        <form action="" method="post">
+          {{ form.hidden_tag() }}
+          <fieldset class="form-group">
+            <legend class="margin-bottom mb-4">Please enter number of players, maximum is five.</legend>
+            <div class="form-group">
+              {{ form.players.label(class="form-control-label") }}
+
+              {% if form.players.errors %}
+                {{ form.players(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.players.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.players(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+          </fieldset>
+          <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+          </div>
+        </form>
+      </div>
+      <div class="border-top pt-3">
+        <small class="text-muted">
+          Want to cancel new game? <a class="ml-2" href="{{ url_for('home') }}">Click here</a>
+        </small>
+      </div>
+{% endblock content %}

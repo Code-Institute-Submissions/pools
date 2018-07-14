@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% block content %}
+      <div class="wgameform">
+        <form action="" method="POST">
+          {{ form.hidden_tag() }}
+          <fieldset class="form-group">
+            <legend class="margin-bottom mb-4">Please enter your prediction below.</legend>
+            <div class="form-group">
+              {{ form.answer.label(class="form-control-label") }}
+
+              {% if form.answer.errors %}
+                {{ form.answer(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.answer.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.answer(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+          </fieldset>
+          <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+          </div>
+        </form>
+      </div>
+      <div class="border-top pt-3">
+        <small class="text-muted">
+          Want to cancel new game? <a class="ml-2" href="{{ url_for('home') }}">Click here</a>
+        </small>
+      </div>
+{% endblock content %}
