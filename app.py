@@ -49,12 +49,12 @@ def enternames(id):
         if id < len(players):
             return redirect(url_for('enternames', id=id+1))
         else:
-            return redirect(url_for('game', id=1))
+            return redirect(url_for('game', id=1, attempt=1))
     return render_template('enternames.html', title='names', form=form, id=1, players=players)
 
 
-@app.route("/game/<int:id>", methods=['GET', 'POST'])
-def game(id):
+@app.route("/game/<int:id>/<int:attempt>", methods=['GET', 'POST'])
+def game(id, attempt):
     form = AnswerForm()
     if form.validate_on_submit():
         answer = form.answer.data
@@ -63,10 +63,16 @@ def game(id):
         result = games[0]['result']
         question = Question(home, away, result)
         players[0].answer = answer
-        if answer == result:
-            flash(f'{players[0].name} correctly predicted {answer} ', 'success')
+        if answer != result:
+            if attempt < 2:
+                flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'warning')
+                return redirect(url_for('game', id=id, attempt=attempt+1))
+            else:
+                flash(f'Wrong again {players[0].name}! ', 'warning')
+                return redirect(url_for('game', id=id+1, attempt=1))
         else:
-            flash(f'{players[0].name} incorrectly predicted {answer} ', 'warning')
+            flash(f'You are correct {players[0].name}', 'success')
+            return redirect(url_for('game', id=id+1, attempt=1))
     return render_template('game.html', title='game', form=form, games=games)
 
 
