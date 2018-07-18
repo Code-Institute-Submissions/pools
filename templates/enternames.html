@@ -1,11 +1,10 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="enternameform">
-  {% for player in range(1) %}
   <form action="" method="POST">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
-      <legend class="margin-bottom mb-4">Please enter your name below.</legend>
+      <legend class="margin-bottom mb-4">Enter your name below</legend>
       <div class="form-group">
         {{ form.playername.label(class="form-control-label") }}
 
@@ -25,7 +24,6 @@
       {{ form.submit(class="btn btn-outline-info") }}
     </div>
   </form>
-  {% endfor %}
 </div>
 <div class="border-top pt-3">
   <small class="text-muted">

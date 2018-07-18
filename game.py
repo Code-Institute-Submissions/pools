@@ -126,4 +126,4 @@ def main():
     calcWinner(players[0], players[1])
 
 
-main()
+#main()
