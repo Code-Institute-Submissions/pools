@@ -32,13 +32,25 @@ season = [[
 # Question class used for creating a question instance containing 2 teams denoted as home and away
 # fixture method used for constructing the question
 class Question:
-    def __init__(self, home, away, correct):
+    def __init__(self, home, away, result):
         self.home = home
         self.away = away
-        self.correct = correct
+        self.result = result
 
     def fixture(self):
-        print(f'{self.home} vs {self.away}')
+        return(f'{self.home} vs {self.away}')
+
+    def res(self):
+        return(self.result)
+
+
+# class Fixture:
+#     def __init__(self, home, away):
+#         self.home = home
+#         self.away = away
+#
+#     def tie(self):
+#         return(f'{self.home} vs {self.away}')
 
 # Player class for creating instance of a player with a name and their scored
 # Player can make a prediction of the score of games

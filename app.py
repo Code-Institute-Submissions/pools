@@ -13,11 +13,24 @@ games = [
     },
     {"game": 2,
     "teams": ["Hudd", "Arsenal"],
-    "result": 3}
+    "result": 2}
     ]
 
-
 players = []
+fixList = []
+results = []
+
+def getFixtures():
+    home = games[0]['teams'][0]
+    away = games[0]['teams'][1]
+    result = games[0]['result']
+    question = Question(home, away, result)
+    fixture = question.fixture()
+    res = question.res()
+    fixList.append(fixture)
+    results.append(res)
+
+getFixtures()
 
 
 @app.route("/")
@@ -55,15 +68,12 @@ def enternames(id):
 
 @app.route("/game/<int:id>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, attempt):
-    form = AnswerForm()
+    form = AnswerForm()    
     if form.validate_on_submit():
         answer = form.answer.data
-        home = games[0]['teams'][0]
-        away = games[0]['teams'][1]
-        result = games[0]['result']
-        question = Question(home, away, result)
         players[0].answer = answer
-        if answer != result:
+        res = results[0]
+        if answer != res:
             if attempt < 2:
                 flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'warning')
                 return redirect(url_for('game', id=id, attempt=attempt+1))
@@ -73,7 +83,8 @@ def game(id, attempt):
         else:
             flash(f'You are correct {players[0].name}', 'success')
             return redirect(url_for('game', id=id+1, attempt=1))
-    return render_template('game.html', title='game', form=form, games=games)
+    return render_template('game.html', title='game', form=form, games=games,
+                           id=id, player=players, fixList=fixList, results=results)
 
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
