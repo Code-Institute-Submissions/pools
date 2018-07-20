@@ -76,27 +76,31 @@ def enternames(id):
 def game(id, attempt):
     form = AnswerForm()
     if form.validate_on_submit():
-        answer = form.answer.data
-        players[0].answer = answer
-        res = results[id-1]
-        secondAttempt = False
-        if answer != res:
-            if attempt < 2:
-                flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'warning')
-                secondAttempt = True
-                return redirect(url_for('game', id=id, attempt=attempt+1))
+        if id < len(games) and attempt == 1:
+            answer = form.answer.data
+            players[0].answer = answer
+            res = results[id-1]
+            secondAttempt = False
+            if answer != res:
+                if attempt < 2:
+                    flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'warning')
+                    secondAttempt = True
+                    return redirect(url_for('game', id=id, attempt=attempt+1))
+                else:
+                    flash(f'Wrong again {players[0].name}! ', 'warning')
+                    return redirect(url_for('game', id=id+1, attempt=1))
             else:
-                flash(f'Wrong again {players[0].name}! ', 'warning')
+                flash(f'You are correct {players[0].name}', 'success')
+                if secondAttempt == False:
+                    players[0].score = players[0].score + int(answer)
+                else:
+                    players[0].score = players[0].score + int(answer) +1
                 return redirect(url_for('game', id=id+1, attempt=1))
         else:
-            flash(f'You are correct {players[0].name}', 'success')
-            if secondAttempt == False:
-                players[0].score = players[0].score + int(answer)
-            else:
-                players[0].score = players[0].score + int(answer) +1
-            return redirect(url_for('game', id=id+1, attempt=1))
+            return redirect(url_for('winner'))
     return render_template('game.html', title='game', form=form, games=games,
                            id=id, player=players, fixList=fixList, results=results)
+
 
 
 @app.route("/winner", methods=['GET', 'POST'])
