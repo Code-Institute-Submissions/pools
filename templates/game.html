@@ -4,13 +4,11 @@
         <form action="" method="POST">
           {{ form.hidden_tag() }}
           <fieldset class="form-group">
-            <!-- <legend class="margin-bottom mb-4">Please enter your prediction below.</legend> -->
-             <!-- {% for game in games[0:1] %} -->
+            <!-- <legend class="margin-bottom mb-4">Enter your prediction below.</legend> -->
                 <h3>Game: {{ id }}</h3>
                 <!-- <h2>{{ home }} vs {{ away }}</h2> -->
                 <h2>{{ fixList[id-1] }}</h2>
-                <!-- <h2>{{ game.teams[0] }} vs {{ game.teams[1] }}</h2> -->
-             <!-- {% endfor %} -->
+                
             <div class="form-group">
               {{ form.answer.label(class="form-control-label") }}
 
@@ -37,8 +35,3 @@
         </small>
       </div>
 {% endblock content %}
-
-<!-- {% for game in games[0:1] %}
-   <h3>Game: {{ game.game}}</h3>
-   <h2>{{ game.teams[0] }} vs {{ game.teams[1] }}</h2>
-{% endfor %} -->
