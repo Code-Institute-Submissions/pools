@@ -90,7 +90,8 @@ def game(id, pNum, attempt):
             #secondAttempt = False
             #this id below is currently hard coded, indicates how many questions
             if id == len(games):
-                if len(players) > 1:
+                if len(players) > pNum:
+                    #if len(players) > pNum :
                     if attempt == 1:
                         if answer != res:
                             flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'warning')
