@@ -84,20 +84,17 @@ def game(id, pNum, attempt):
     for game in games:
         if form.validate_on_submit():
             answer = form.answer.data
-            #below line needs to be changed in multiplayer
             players[pNum-1].answer = answer
             res = results[id-1]
-            #secondAttempt = False
-            #this id below is currently hard coded, indicates how many questions
+            #secondAttempt = True
             if id == len(games):
                 if len(players) > pNum:
-                    #if len(players) > pNum :
                     if attempt == 1:
                         if answer != res:
                             flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'warning')
-                            secondAttempt = True
                             return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
                         else:
+                            players[pNum-1].score = players[pNum-1].score + int(answer)
                             return redirect(url_for('game', id=1, pNum=pNum+1, attempt=1))
                     else:
                         if answer == res:
