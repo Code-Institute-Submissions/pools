@@ -1,5 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
     <h2>Winner / Draw Page</h2>
-    <p>{{ players[0].name }} scored {{ players[0].score }} points!</p>
+    <!-- <p>{{ players[0].name }} scored {{ players[0].score }} points!</p> -->
+    {% for player in players %}
+      <p>{{ player.name }} scored {{ player.score }} points!</p>
+    {% endfor %}
 {% endblock content %}

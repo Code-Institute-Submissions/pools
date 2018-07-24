@@ -61,7 +61,7 @@ def newgame():
             #players.append(i)
             players.append(player)
         return redirect(url_for('enternames', id=1))
-    return render_template('newgame.html', title='newgame', form=form, player=Player)
+    return render_template('newgame.html', title='newgame', form=form )
 
 
 @app.route("/enternames/<int:id>", methods=['GET', 'POST'])
@@ -75,7 +75,7 @@ def enternames(id):
             return redirect(url_for('enternames', id=id+1))
         else:
             return redirect(url_for('game', id=1, pNum=1, attempt=1))
-    return render_template('enternames.html', title='names', form=form, id=1, players=players)
+    return render_template('enternames.html', title='names', form=form, id=id, players=players)
 
 
 @app.route("/game/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
