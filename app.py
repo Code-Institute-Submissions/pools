@@ -13,7 +13,11 @@ games = [
     },
     {"game": 2,
     "teams": ["Hudd", "Arsenal"],
-    "result": 2}
+    "result": 2
+    },
+    {"game": 3,
+    "teams": ["Swansea", "Stoke"],
+    "result": 3}
     ]
 
 players = []
@@ -52,8 +56,10 @@ def newgame():
         numPlayers = form.players.data
         flash(f'{numPlayers} player game created!', 'success')
         for i in range(int(numPlayers)):
-            i = Player()
-            players.append(i)
+            #i = player
+            player = Player()
+            #players.append(i)
+            players.append(player)
         return redirect(url_for('enternames', id=1))
     return render_template('newgame.html', title='newgame', form=form, player=Player)
 
@@ -68,48 +74,50 @@ def enternames(id):
         if id < len(players):
             return redirect(url_for('enternames', id=id+1))
         else:
-            return redirect(url_for('game', id=1, attempt=1))
+            return redirect(url_for('game', id=1, pNum=1, attempt=1))
     return render_template('enternames.html', title='names', form=form, id=1, players=players)
 
 
-@app.route("/game/<int:id>/<int:attempt>", methods=['GET', 'POST'])
-def game(id, attempt):
+@app.route("/game/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
+def game(id, pNum, attempt):
     form = AnswerForm()
-    for i in games:
+    for game in games:
         if form.validate_on_submit():
             answer = form.answer.data
+            #below line needs to be changed in multiplayer
             players[0].answer = answer
             res = results[id-1]
             secondAttempt = False
-            #this id below is currently hard coded
-            if id == 2:
+            #this id below is currently hard coded, indicates how many questions
+            if id == 3:
                 if answer != res and attempt < 2:
                     flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'warning')
                     secondAttempt = True
-                    return redirect(url_for('game', id=id, attempt=attempt+1))
+                    return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
+                elif answer == res and attempt == 2:
+                    players[0].score = players[0].score +1
                 else:
-                    players[0].score = players[0].score + int(answer)
+                    players[0].score = players[0].score +int(answer)
                     return redirect(url_for('winner'))
-            else:
-                if id < len(games):
+            if id < len(games):
                     secondAttempt = False
                     if answer != res:
                         if attempt < 2:
                             flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'warning')
                             secondAttempt = True
-                            return redirect(url_for('game', id=id, attempt=attempt+1))
+                            return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
                         else:
                             flash(f'Wrong again {players[0].name}! ', 'warning')
-                            return redirect(url_for('game', id=id+1, attempt=1))
+                            return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
                     else:
                         flash(f'You are correct {players[0].name}', 'success')
                         if secondAttempt == False:
                             players[0].score = players[0].score + int(answer)
                         else:
                             players[0].score = players[0].score +1
-                        return redirect(url_for('game', id=id+1, attempt=1))
+                        return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
         return render_template('game.html', title='game', form=form, games=games,
-                               id=id, player=players, fixList=fixList, results=results)
+                                   id=id, player=players, fixList=fixList, results=results)
 
 
 
