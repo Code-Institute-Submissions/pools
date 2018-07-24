@@ -89,13 +89,15 @@ def game(id, pNum, attempt):
             res = results[id-1]
             secondAttempt = False
             #this id below is currently hard coded, indicates how many questions
-            if id == 3:
+            if id == len(games):
                 if answer != res and attempt < 2:
                     flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'warning')
                     secondAttempt = True
                     return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
                 elif answer == res and attempt == 2:
                     players[0].score = players[0].score +1
+                elif len(players) > pNum :
+                    return redirect(url_for('game', id=1, pNum=pNum+1, attempt=1))
                 else:
                     players[0].score = players[0].score +int(answer)
                     return redirect(url_for('winner'))
@@ -117,7 +119,7 @@ def game(id, pNum, attempt):
                             players[0].score = players[0].score +1
                         return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
         return render_template('game.html', title='game', form=form, games=games,
-                                   id=id, player=players, fixList=fixList, results=results)
+                                       id=id, player=players, fixList=fixList, results=results)
 
 
 
