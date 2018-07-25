@@ -13,5 +13,5 @@ class NameForm(FlaskForm):
     submit = SubmitField('Enter Name')
 
 class AnswerForm(FlaskForm):
-    answer = IntegerField('Answer', validators=[DataRequired(), NumberRange(min=1, max=3)])
+    answer = IntegerField('Enter answer', validators=[DataRequired(), NumberRange(min=1, max=3)])
     submit = SubmitField('Confirm')

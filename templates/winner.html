@@ -5,4 +5,5 @@
     {% for player in players %}
       <p>{{ player.name }} scored {{ player.score }} points!</p>
     {% endfor %}
+    <p>Result: {{ calcWinner(players[0], players[1]) }}</p>
 {% endblock content %}

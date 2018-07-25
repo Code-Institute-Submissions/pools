@@ -6,9 +6,8 @@
           <fieldset class="form-group">
             <!-- <legend class="margin-bottom mb-4">Enter your prediction below.</legend> -->
                 <h3>Game: {{ id }}</h3>
-                <!-- <h2>{{ home }} vs {{ away }}</h2> -->
-                <h2>{{ fixList[id-1] }}</h2>
-                
+                <h2 class="fixture">{{ fixList[id-1] }}</h2>
+                <h4 class="player">Player: <span class="punderline">{{ player[pNum-1].name }}</span></h4>
             <div class="form-group">
               {{ form.answer.label(class="form-control-label") }}
 
@@ -34,4 +33,5 @@
           Want to cancel new game? <a class="ml-2" href="{{ url_for('home') }}">Click here</a>
         </small>
       </div>
+
 {% endblock content %}

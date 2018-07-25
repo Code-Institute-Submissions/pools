@@ -7,3 +7,40 @@ body {
 .bg-green {
   background-color: #299923;
 }
+
+.fixture {
+  margin: 1.5rem 0rem 1.5rem;
+}
+
+.player {
+  margin-bottom: 2rem;
+}
+
+.punderline {
+  border-bottom: 4px solid #299923;
+}
+
+.bg {
+    /* The image used */
+    background: url('../static/img/pitch.png');
+
+    /* Full height */
+    height: 100vh;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@Keyframes flashfade {
+0% {opacity:0;}
+20% {opacity:1}
+80% {opacity:1}
+100% {opacity:0}
+}
+.flashfade {
+animation-name: flashfade;
+animation-duration: 6s;
+display: block;
+}

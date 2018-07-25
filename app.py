@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player
+from game import Question, Player, calcWinner
 
 app = Flask(__name__)
 
@@ -54,7 +54,7 @@ def newgame():
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = form.players.data
-        flash(f'{numPlayers} player game created!', 'success')
+        flash(f'{numPlayers} player game created!', 'dark')
         for i in range(int(numPlayers)):
             #i = player
             player = Player()
@@ -70,7 +70,7 @@ def enternames(id):
     if form.validate_on_submit():
         name = form.playername.data
         players[id-1].name = name
-        flash(f'Good luck {name}!! ', 'success')
+        flash(f'Good luck {name}!! ', 'dark')
         if id < len(players):
             return redirect(url_for('enternames', id=id+1))
         else:
@@ -128,7 +128,7 @@ def game(id, pNum, attempt):
                             flash(f'Wrong again {players[pNum-1].name}! ', 'warning')
                             return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
                     else:
-                        flash(f'You are correct {players[pNum-1].name}', 'success')
+                        flash(f'You are correct {players[pNum-1].name}', 'dark')
                         if secondAttempt == False:
                             players[pNum-1].score = players[pNum-1].score + int(answer)
                         else:
@@ -141,7 +141,10 @@ def game(id, pNum, attempt):
 
 @app.route("/winner", methods=['GET', 'POST'])
 def winner():
-    return render_template('winner.html', title='winner', players=players)
+    # Sort players by score
+    players.sort(key=lambda x: x.score, reverse=True)
+    calcWinner(players[0], players[1])
+    return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner)
 
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
