@@ -141,9 +141,14 @@ def game(id, pNum, attempt):
 
 @app.route("/winner", methods=['GET', 'POST'])
 def winner():
-    # Sort players by score
-    players.sort(key=lambda x: x.score, reverse=True)
-    calcWinner(players[0], players[1])
+    if len(players) == 1:
+        with open('scores.txt', 'a') as f:
+            f.write(str(players[0].score))
+    else:
+        # Sort players by score
+        players.sort(key=lambda x: x.score, reverse=True)
+        if len(players) > 1:
+            calcWinner(players[0], players[1])
     return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner)
 
 
@@ -152,9 +157,9 @@ def leaderboard():
     return render_template('leaderboard.html', title='leaderboard')
 
 
-@app.route("/about")
-def about():
-    return render_template('about.html')
+@app.route("/rules")
+def rules():
+    return render_template('rules.html')
 
 
 if __name__ == '__main__':

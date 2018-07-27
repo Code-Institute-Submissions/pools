@@ -1,11 +1,43 @@
-body {
-  background: #fafafa;
-  color: #333333;
-  margin-top: 5rem;
+:root {
+  --kick-off-green: #06a84c;
+  --prem-purple: #2f1167;
 }
 
+.purp {
+  color: var(--prem-purple);
+}
+
+body {
+  /* background: #fafafa; */
+  margin-top: 5rem;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.francois {
+  font-family: 'Francois One', sans-serif;
+}
+
+.home-page {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+
+.home-page h1 {
+  font-size: 4rem;
+  color: var(--kick-off-green);
+}
+
+.cover-container {
+  max-width: 42em;
+}
+
+
 .bg-green {
-  background-color: #299923;
+  background-color: var(--kick-off-green);
 }
 
 .fixture {
@@ -16,31 +48,47 @@ body {
   margin-bottom: 2rem;
 }
 
-.punderline {
-  border-bottom: 4px solid #299923;
+.wgameform h2, h3, h4 {
+  color: #51674b;
 }
 
-.bg {
-    /* The image used */
-    background: url('../static/img/pitch.png');
+.punderline {
+	border-bottom: 2px dashed var(--kick-off-green);
+	border-bottom: 2px dashed rgba(0, 0, 0, .5);
+	-webkit-background-clip: padding-box; /* for Safari */
+	background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+  -webkit-animation: underBlink 1s infinite;
+  -moz-animation:    underBlink 1s infinite;
+  -o-animation:      underBlink 1s infinite;
+  animation:         underBlink 1s infinite;
+}
 
+@-webkit-keyframes underBlink {
+  0%   { border-bottom: 2px solid rgba(0, 0, 0, .2); }
+  100% { border-bottom: 2px solid rgba(0, 0, 0, .5); }
+}
+@-moz-keyframes underBlink {
+  0%   { border-bottom: 2px solid rgba(0, 0, 0, .2); }
+  100% { border-bottom: 2px solid rgba(0, 0, 0, .5); }
+}
+@-o-keyframes underBlink {
+  0%   { border-bottom: 2px solid rgba(0, 0, 0, .2); }
+  100% { border-bottom: 2px solid rgba(0, 0, 0, .5); }
+}
+@keyframes underBlink {
+  0%   { border-bottom: 2px solid rgba(0, 0, 0, .2); }
+  100% { border-bottom: 2px solid rgba(0, 0, 0, .5); }
+}
+
+.backgroundd {
+    /* The image used */
+    background: url('../static/img/pitch2.jpg');
+    opacity: 0.5;
     /* Full height */
-    height: 100vh;
+    /* height: 100vh; */
 
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-}
-
-@Keyframes flashfade {
-0% {opacity:0;}
-20% {opacity:1}
-80% {opacity:1}
-100% {opacity:0}
-}
-.flashfade {
-animation-name: flashfade;
-animation-duration: 6s;
-display: block;
 }

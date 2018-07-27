@@ -1,13 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
 <section class="home-page text-center cover-container d-flex h-100 p-3 mx-auto flex-column">
-  <h1 class="francois">Kick Off!</h1>
-  <p class="lead">Test your knowledge of the past football season with friends with  the Kick Off App</p>
-  <p class="lead">Play in 1 Player mode or with up to 5 friends.</p>
+  <h2 class="francois">Game Rules</h2>
   <p class="lead">The rules are simple, just enter 1 for a home win, 2 for a draw or 3 for an away win.  If your answer is wrong you will have one more attempt.</p>
+  <p class="lead">Points system: If answer is correct you will receive the same number of points  as the answer.  1 point is scored for a correct 2nd attempt and two incorrect guess's receives zero points.</p>
   <p class="">
     <a href="{{ url_for('newgame') }}" class="btn btn-lg btn-secondary">Play Now</a>
   </p>
 </section>
-
 {% endblock content %}

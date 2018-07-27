@@ -1,4 +1,39 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h2>Leaderboard</h2>
+<h2 class="text-center">High Scores</h2>
+  <table class="table table-bordered table-striped">
+    <caption>
+    Top ten scores shown
+    </caption>
+    <thead>
+      <tr>
+        <th data-defaultsign="_19">Rank</th>
+        <th data-defaultsign="AZ">User Name</th>
+        <th data-defaultsign="month">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-value="1">1</th>
+        <td>Mark</td>
+        <td>45</td>
+      </tr>
+      <tr>
+        <td data-value="2">1</th>
+        <td>Jimbo</td>
+        <td>45</td>
+      </tr>
+      <tr>
+        <td data-value="3">1</th>
+        <td>Kim</td>
+        <td>45</td>
+      </tr>
+      <!-- <tr>
+        <td data-value="3">3</th>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td data-dateformat="MM-DD-YYYY">11-11-1960</td>
+      </tr> -->
+    </tbody>
+  </table>
 {% endblock %}

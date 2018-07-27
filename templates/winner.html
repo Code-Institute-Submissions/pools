@@ -5,5 +5,11 @@
     {% for player in players %}
       <p>{{ player.name }} scored {{ player.score }} points!</p>
     {% endfor %}
-    <p>Result: {{ calcWinner(players[0], players[1]) }}</p>
+    {% if players |length > 1 %}
+      <p>Result: {{ calcWinner(players[0], players[1]) }}</p>
+    {% endif %}
+    <p class="lead">Click on the button below to view high scores table.</p>
+    <p class="">
+      <a href="{{ url_for('leaderboard') }}" class="btn btn-lg btn-secondary">High Scores</a>
+    </p>
 {% endblock content %}

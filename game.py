@@ -63,6 +63,19 @@ class Player:
         answer = input(f'Enter your prediction {self.name}.. ')
         self.answer = int(answer)
 
+# Open file class for set up and taerdown of files
+class Open_File():
+    def __init__(self, filename, mode):
+        self.filename = filename
+        self.mode = mode
+
+    def __enter__(self):
+        self.file = open(self.filename, self.mode)
+        return self.file
+
+    def __exit__(self, exc_type, exc_val, traceback):
+        self.file.close()
+
 # Function to convert guess input to string
 def ansConv(guess):
     if guess == 1:
@@ -77,9 +90,10 @@ def ansConv(guess):
 # If these 2 scores are equal then its a draw and any remaining players dont matter
 def calcWinner(playerA, playerB):
     if playerA.score > playerB.score:
-        print(f'{playerA.name} is the winner!')
+        #change return to print to function in console
+        return(f'{playerA.name} is the winner!')
     else:
-        print('Game has finished in a draw!')
+        return('Game has finished in a draw!')
 
 
 def main():
