@@ -23,6 +23,23 @@ games = [
 players = []
 fixList = []
 results = []
+scores = []
+
+scoresbu = [{'player':'Nicky',
+           'score': 8},
+          {'player':'Ozzy',
+           'score': 4}]
+
+def highscore():
+    player = {}
+    with open('scores.txt', 'r') as r:
+        string = r.read()
+        name, score = string.split(':')
+        player['name'] = name
+        player['score'] = score
+        scores.append(player)
+
+
 
 
 def getFixtures():
@@ -142,8 +159,11 @@ def game(id, pNum, attempt):
 @app.route("/winner", methods=['GET', 'POST'])
 def winner():
     if len(players) == 1:
-        with open('scores.txt', 'a') as f:
-            f.write(str(players[0].score))
+        with open('scores.txt', 'a') as w:
+            name = players[0].name
+            score = str(players[0].score)
+            w.write(f'{name}:{score}')
+            w.write('\n')
     else:
         # Sort players by score
         players.sort(key=lambda x: x.score, reverse=True)
@@ -154,7 +174,8 @@ def winner():
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 def leaderboard():
-    return render_template('leaderboard.html', title='leaderboard')
+    highscore()
+    return render_template('leaderboard.html', title='leaderboard', scores=scores)
 
 
 @app.route("/rules")

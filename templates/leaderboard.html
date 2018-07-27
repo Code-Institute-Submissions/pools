@@ -8,7 +8,7 @@
     <thead>
       <tr>
         <th data-defaultsign="_19">Rank</th>
-        <th data-defaultsign="AZ">User Name</th>
+        <th data-defaultsign="AZ">Name</th>
         <th data-defaultsign="month">Score</th>
       </tr>
     </thead>
@@ -19,15 +19,22 @@
         <td>45</td>
       </tr>
       <tr>
-        <td data-value="2">1</th>
+        <td data-value="2">2</th>
         <td>Jimbo</td>
         <td>45</td>
       </tr>
       <tr>
-        <td data-value="3">1</th>
+        <td data-value="3">3</th>
         <td>Kim</td>
         <td>45</td>
       </tr>
+      {% for score in scores %}
+      <tr>
+        <td data-value="4">4</th>
+        <td>{{ score.name }}</td>
+        <td>{{ score.score }}</td>
+      </tr>
+      {% endfor %}
       <!-- <tr>
         <td data-value="3">3</th>
         <td>Larry</td>
