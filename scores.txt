@@ -1,0 +1,13 @@
+Max:6
+Rusty:6
+Nickwick:6
+Jackie:6
+Dave:6
+Sally:2
+Barbara:3
+Jenny:3
+Keith:6
+Nelly:4
+Timmy:2
+Nickwick:6
+Rusty:3

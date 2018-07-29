@@ -13,24 +13,9 @@
       </tr>
     </thead>
     <tbody>
+      {% for score in highscores %}
       <tr>
         <td data-value="1">1</th>
-        <td>Mark</td>
-        <td>45</td>
-      </tr>
-      <tr>
-        <td data-value="2">2</th>
-        <td>Jimbo</td>
-        <td>45</td>
-      </tr>
-      <tr>
-        <td data-value="3">3</th>
-        <td>Kim</td>
-        <td>45</td>
-      </tr>
-      {% for score in scores %}
-      <tr>
-        <td data-value="4">4</th>
         <td>{{ score.name }}</td>
         <td>{{ score.score }}</td>
       </tr>

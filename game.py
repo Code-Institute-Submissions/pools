@@ -96,6 +96,8 @@ def calcWinner(playerA, playerB):
         return('Game has finished in a draw!')
 
 
+
+
 def main():
     # initialize empty list to store player objects
     players = []

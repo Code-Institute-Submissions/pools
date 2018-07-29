@@ -20,26 +20,20 @@ games = [
     "result": 3}
     ]
 
+#function to extract scores from scores.txt and create player objects
+def getHighscores():
+    with open('scores.txt', 'r') as r:
+        for line in r:
+            player = {}
+            name, score = line.split(':')
+            player['name'] = name
+            player['score'] = score
+            highscores.append(player)
+
 players = []
 fixList = []
 results = []
-scores = []
-
-scoresbu = [{'player':'Nicky',
-           'score': 8},
-          {'player':'Ozzy',
-           'score': 4}]
-
-def highscore():
-    player = {}
-    with open('scores.txt', 'r') as r:
-        string = r.read()
-        name, score = string.split(':')
-        player['name'] = name
-        player['score'] = score
-        scores.append(player)
-
-
+highscores = []
 
 
 def getFixtures():
@@ -53,12 +47,9 @@ def getFixtures():
         fixList.append(fixture)
         results.append(res)
 
-
+getHighscores()
 getFixtures()
 
-# home = games[0]['teams'][0]
-# away = games[0]['teams'][1]
-# result = games[0]['result']
 
 @app.route("/")
 @app.route("/home")
@@ -68,14 +59,15 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
+    if len(players) > 0:
+        for player in players:
+            del player
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = form.players.data
         flash(f'{numPlayers} player game created!', 'dark')
         for i in range(int(numPlayers)):
-            #i = player
             player = Player()
-            #players.append(i)
             players.append(player)
         return redirect(url_for('enternames', id=1))
     return render_template('newgame.html', title='newgame', form=form )
@@ -164,18 +156,28 @@ def winner():
             score = str(players[0].score)
             w.write(f'{name}:{score}')
             w.write('\n')
+            highscore()
     else:
         # Sort players by score
         players.sort(key=lambda x: x.score, reverse=True)
         if len(players) > 1:
             calcWinner(players[0], players[1])
-    return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner)
+    return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner, highscores=highscores)
+
+#read last line of scores.txt and add to highscores array
+def highscore():
+    with open('scores.txt', 'r') as r:
+        player = {}
+        last_line = r.readlines()[-1]
+        name, score = last_line.split(':')
+        player['name'] = name
+        player['score'] = score
+        highscores.append(player)
 
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 def leaderboard():
-    highscore()
-    return render_template('leaderboard.html', title='leaderboard', scores=scores)
+    return render_template('leaderboard.html', title='leaderboard', highscores=highscores)
 
 
 @app.route("/rules")
