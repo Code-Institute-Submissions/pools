@@ -20,6 +20,15 @@ games = [
     "result": 3}
     ]
 
+
+
+players = []
+fixList = []
+results = []
+highscores = []
+sortedArray = []
+topTen = []
+
 #function to extract scores from scores.txt and create player objects
 def getHighscores():
     with open('scores.txt', 'r') as r:
@@ -30,10 +39,6 @@ def getHighscores():
             player['score'] = score
             highscores.append(player)
 
-players = []
-fixList = []
-results = []
-highscores = []
 
 
 def getFixtures():
@@ -49,6 +54,8 @@ def getFixtures():
 
 getHighscores()
 getFixtures()
+sortedArray = sorted(highscores, key=lambda item: item['score'], reverse=True)
+topTen = sortedArray[0:10]
 
 
 @app.route("/")
@@ -157,6 +164,7 @@ def winner():
             w.write(f'{name}:{score}')
             w.write('\n')
             highscore()
+        sorted(highscores, key=lambda d: d['score'], reverse=True)
     else:
         # Sort players by score
         players.sort(key=lambda x: x.score, reverse=True)
@@ -175,9 +183,10 @@ def highscore():
         highscores.append(player)
 
 
+
 @app.route("/leaderboard", methods=['GET', 'POST'])
 def leaderboard():
-    return render_template('leaderboard.html', title='leaderboard', highscores=highscores)
+    return render_template('leaderboard.html', title='leaderboard', highscores=highscores, sortedArray=sortedArray, topTen=topTen)
 
 
 @app.route("/rules")

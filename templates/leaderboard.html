@@ -13,13 +13,13 @@
       </tr>
     </thead>
     <tbody>
-      {% for score in highscores %}
-      <tr>
-        <td data-value="1">1</th>
-        <td>{{ score.name }}</td>
-        <td>{{ score.score }}</td>
-      </tr>
-      {% endfor %}
+        {% for score in topTen %}
+          <tr>
+            <td>{{ score score.index(score) }}</th>
+            <td>{{ score.name }}</td>
+            <td>{{ score.score }}</td>
+          </tr>
+        {% endfor %}
       <!-- <tr>
         <td data-value="3">3</th>
         <td>Larry</td>
