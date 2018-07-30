@@ -66,9 +66,6 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    if len(players) > 0:
-        for player in players:
-            del player
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = form.players.data
@@ -161,16 +158,18 @@ def winner():
         with open('scores.txt', 'a') as w:
             name = players[0].name
             score = str(players[0].score)
-            w.write(f'{name}:{score}')
-            w.write('\n')
-            highscore()
-        sorted(highscores, key=lambda d: d['score'], reverse=True)
+            w.write(f'{name}:{score}\n')
+            if len(highscores) > 0:
+                highscore()
     else:
         # Sort players by score
         players.sort(key=lambda x: x.score, reverse=True)
         if len(players) > 1:
             calcWinner(players[0], players[1])
     return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner, highscores=highscores)
+
+
+
 
 #read last line of scores.txt and add to highscores array
 def highscore():
