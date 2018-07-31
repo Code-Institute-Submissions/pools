@@ -44,14 +44,6 @@ class Question:
         return(self.result)
 
 
-# class Fixture:
-#     def __init__(self, home, away):
-#         self.home = home
-#         self.away = away
-#
-#     def tie(self):
-#         return(f'{self.home} vs {self.away}')
-
 # Player class for creating instance of a player with a name and their scored
 # Player can make a prediction of the score of games
 class Player:
@@ -76,6 +68,7 @@ class Open_File():
     def __exit__(self, exc_type, exc_val, traceback):
         self.file.close()
 
+
 # Function to convert guess input to string
 def ansConv(guess):
     if guess == 1:
@@ -94,7 +87,6 @@ def calcWinner(playerA, playerB):
         return(f'{playerA.name} is the winner!')
     else:
         return('Game has finished in a draw!')
-
 
 
 

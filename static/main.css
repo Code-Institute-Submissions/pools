@@ -1,5 +1,6 @@
 :root {
   --kick-off-green: #06a84c;
+  --text-green: #51674b;
   --prem-purple: #2f1167;
 }
 
@@ -24,11 +25,15 @@ body {
   -ms-flex-pack: center;
   -webkit-box-pack: center;
   justify-content: center;
+  color: var(--text-green);
 }
 
 .home-page h1 {
-  font-size: 4rem;
-  color: var(--kick-off-green);
+  font-size: 3rem;
+  opacity: .8;
+  color: rgba(0,0,0,0.6);
+  text-shadow: 2px 8px 6px rgba(0,0,0,0.2),
+                 0px -5px 35px rgba(255,255,255,0.3);
 }
 
 .cover-container {
@@ -40,6 +45,10 @@ body {
   background-color: var(--kick-off-green);
 }
 
+.dark-green {
+  color: var(--text-green);
+}
+
 .fixture {
   margin: 1.5rem 0rem 1.5rem;
 }
@@ -49,7 +58,15 @@ body {
 }
 
 .wgameform h2, h3, h4 {
-  color: #51674b;
+  color: var(--text-green);
+}
+
+.enternameform, .newgameform {
+  color: var(--text-green);
+}
+
+.cancel {
+  margin-bottom: 1rem;
 }
 
 .punderline {
@@ -80,10 +97,30 @@ body {
   100% { border-bottom: 2px solid rgba(0, 0, 0, .5); }
 }
 
+.winner {
+  color: #b69a08;
+  text-decoration: underline #5b9dc2;
+}
+
+.result {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #5b9dc2;
+}
+
+.winner-section {
+  /* background: url('../static/img/winner.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; */
+}
+
+
+
 .backgroundd {
     /* The image used */
-    background: url('../static/img/pitch2.jpg');
-    opacity: 0.5;
+    background: url('../static/img/sunset.jpeg');
+    opacity: 0.3;
     /* Full height */
     /* height: 100vh; */
 

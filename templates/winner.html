@@ -1,15 +1,19 @@
 {% extends 'layout.html' %}
-{% block content %}
-    <h2>Winner / Draw Page</h2>
-    <!-- <p>{{ players[0].name }} scored {{ players[0].score }} points!</p> -->
-    {% for player in players %}
-      <p>{{ player.name }} scored {{ player.score }} points!</p>
-    {% endfor %}
-    {% if players |length > 1 %}
-      <p>Result: {{ calcWinner(players[0], players[1]) }}</p>
-    {% endif %}
-    <p class="lead">Click on the button below to view high scores table.</p>
-    <p class="">
-      <a href="{{ url_for('leaderboard') }}" class="btn btn-lg btn-secondary">High Scores</a>
-    </p>
-{% endblock content %}
+
+
+  {% block content %}
+    <section class="winner-section">
+      <h2 class="winner">Result</h2>
+      <!-- <p>{{ players[0].name }} scored {{ players[0].score }} points!</p> -->
+      {% for player in players %}
+        <p class="result">{{ player.name }} scored {{ player.score }} points!</p>
+      {% endfor %}
+      {% if players |length > 1 %}
+        <p class="result">Result: {{ calcWinner(players[0], players[1]) }}</p>
+      {% endif %}
+      <p class="dark-green">Click on the button below to view high scores table.</p>
+      <p class="">
+        <a href="{{ url_for('leaderboard') }}" class="btn btn-lg btn-dark">High Scores</a>
+      </p>
+    </section>
+  {% endblock content %}
