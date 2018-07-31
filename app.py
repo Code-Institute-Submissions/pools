@@ -20,16 +20,21 @@ games = [
     "result": 3}
     ]
 
-
-
+# player objects
 players = []
 fixList = []
 results = []
+# player scores dictionary
 highscores = []
 sortedArray = []
 topTen = []
 
-#function to extract scores from scores.txt and create player objects
+# when new game is started the players list is cleared
+def resetGame():
+    del players[:]
+
+
+#function to extract scores from scores.txt and create dictionary of highscore player objects
 def getHighscores():
     with open('scores.txt', 'r') as r:
         for line in r:
@@ -40,7 +45,7 @@ def getHighscores():
             highscores.append(player)
 
 
-
+# create fixtures for the game questions
 def getFixtures():
     for game in games:
         home = game['teams'][0]
@@ -52,10 +57,9 @@ def getFixtures():
         fixList.append(fixture)
         results.append(res)
 
-getHighscores()
+
+# getHighscores()
 getFixtures()
-sortedArray = sorted(highscores, key=lambda item: item['score'], reverse=True)
-topTen = sortedArray[0:10]
 
 
 @app.route("/")
@@ -66,6 +70,7 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
+    resetGame()
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = form.players.data
@@ -99,12 +104,11 @@ def game(id, pNum, attempt):
             answer = form.answer.data
             players[pNum-1].answer = answer
             res = results[id-1]
-            #secondAttempt = True
             if id == len(games):
                 if len(players) > pNum:
                     if attempt == 1:
                         if answer != res:
-                            flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'warning')
+                            flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'dark')
                             return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
                         else:
                             players[pNum-1].score = players[pNum-1].score + int(answer)
@@ -119,7 +123,7 @@ def game(id, pNum, attempt):
                 else:
                     if attempt == 1:
                         if answer != res:
-                            flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'warning')
+                            flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'dark')
                             return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
                         else:
                             players[pNum-1].score = players[pNum-1].score + int(answer)
@@ -134,7 +138,7 @@ def game(id, pNum, attempt):
                     secondAttempt = False
                     if answer != res:
                         if attempt < 2:
-                            flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'warning')
+                            flash(f'One more go {players[pNum-1].name}, your first guess was: {answer} ', 'dark')
                             secondAttempt = True
                             return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
                         else:
@@ -170,7 +174,6 @@ def winner():
 
 
 
-
 #read last line of scores.txt and add to highscores array
 def highscore():
     with open('scores.txt', 'r') as r:
@@ -181,6 +184,11 @@ def highscore():
         player['score'] = score
         highscores.append(player)
 
+
+getHighscores()
+#sort highscores into top ten
+sortedArray = sorted(highscores, key=lambda item: item['score'], reverse=True)
+topTen = sortedArray[0:10]
 
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
@@ -198,19 +206,3 @@ if __name__ == '__main__':
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(debug=True)
     #app.run(debug=True, host='0.0.0.0')
-
-
-
-'''
-@app.route("/enternames/<int:id>", methods=['GET', 'POST'])
-def enternames(id):
-    form = NameForm()
-    if form.validate_on_submit():
-        name = form.playername.data
-        players[id-1].name = name
-        flash(f'Good luck {name}!! ', 'success')
-        if len(players) == 2:
-            return redirect(url_for('enternames', title='names', form=form, id=2))
-        return redirect(url_for('game', id=1))
-    return render_template('enternames.html', title='names', form=form, id=1)
-'''
