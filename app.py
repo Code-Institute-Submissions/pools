@@ -75,7 +75,7 @@ def newgame():
     if form.validate_on_submit():
         numPlayers = form.players.data
         flash(f'{numPlayers} player game created!', 'dark')
-        for i in range(int(numPlayers)):
+        for player in range(int(numPlayers)):
             player = Player()
             players.append(player)
         return redirect(url_for('enternames', id=1))
@@ -204,4 +204,5 @@ def rules():
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
+    #app.run(debug=True, host='0.0.0.0')
