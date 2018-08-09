@@ -120,8 +120,8 @@ def game(id, pNum, attempt):
     for game in games:
         if form.validate_on_submit():
             answer = form.answer.data
-            players[pNum].answer = answer
-            res = results[id-1]
+            players[0].answer = answer
+            res = results[0]
             if id == len(games):
                 if len(players) > pNum:
                     if attempt == 1:
@@ -141,16 +141,16 @@ def game(id, pNum, attempt):
                 else:
                     if attempt == 1:
                         if answer != res:
-                            flash(f'One more go {players[pNum].name}, your first guess was: {answer} ', 'dark')
+                            flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'dark')
                             return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
                         else:
-                            players[pNum].score = players[pNum].score + int(answer)
+                            players[0].score = players[0].score + int(answer)
                             return redirect(url_for('winner'))
                     else:
                         if answer != res:
                             return redirect(url_for('winner'))
                         else:
-                            players[pNum].score = players[pNum].score + 1
+                            players[0].score = players[0].score + 1
                             return redirect(url_for('winner'))
             if id < len(games):
                     secondAttempt = False
