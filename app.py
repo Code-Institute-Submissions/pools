@@ -82,36 +82,36 @@ def newgame():
     return render_template('newgame.html', title='newgame', form=form )
 
 
+# @app.route("/enternames/<int:id>", methods=['GET', 'POST'])
+# def enternames(id):
+#     form = NameForm()
+#     if form.validate_on_submit():
+#         if id < len(players):
+#             name = form.playername.data
+#             players[id].name = name
+#             flash(f'Good luck {name}!! ', 'dark')
+#             return redirect(url_for('enternames', id=id+1))
+#         elif len(players) == 1:
+#             name = form.playername.data
+#             players[0].name = name
+#             flash(f'Good luck {name}!! ', 'dark')
+#             return redirect(url_for('game', id=1, pNum=1, attempt=1))
+#         else:
+#             return redirect(url_for('game', id=1, pNum=1, attempt=1))
+#     return render_template('enternames.html', title='names', form=form, id=id, players=players)
+
 @app.route("/enternames/<int:id>", methods=['GET', 'POST'])
 def enternames(id):
     form = NameForm()
     if form.validate_on_submit():
+        name = form.playername.data
+        players[id-1].name = name
+        flash(f'Good luck {name}!! ', 'dark')
         if id < len(players):
-            name = form.playername.data
-            players[id].name = name
-            flash(f'Good luck {name}!! ', 'dark')
             return redirect(url_for('enternames', id=id+1))
-        elif len(players) == 1:
-            name = form.playername.data
-            players[0].name = name
-            flash(f'Good luck {name}!! ', 'dark')
-            return redirect(url_for('game', id=1, pNum=1, attempt=1))
         else:
             return redirect(url_for('game', id=1, pNum=1, attempt=1))
     return render_template('enternames.html', title='names', form=form, id=id, players=players)
-
-    # @app.route("/enternames/<int:id>", methods=['GET', 'POST'])
-    # def enternames(id):
-    #     form = NameForm()
-    #     if form.validate_on_submit():
-    #         name = form.playername.data
-    #         players[id-1].name = name
-    #         flash(f'Good luck {name}!! ', 'dark')
-    #         if id < len(players):
-    #             return redirect(url_for('enternames', id=id+1))
-    #         else:
-    #             return redirect(url_for('game', id=1, pNum=1, attempt=1))
-    #     return render_template('enternames.html', title='names', form=form, id=id, players=players)
 
 
 @app.route("/game/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
@@ -220,7 +220,7 @@ def rules():
 
 
 if __name__ == '__main__':
-    app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    # app.jinja_env.auto_reload = True
+    # app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(debug=True)
     #app.run(debug=True, host='0.0.0.0')
