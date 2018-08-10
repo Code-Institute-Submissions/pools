@@ -105,7 +105,7 @@ def enternames(id):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        players[id-1].name = name
+        players[int(id-1)].name = name
         flash(f'Good luck {name}!! ', 'dark')
         if id < len(players):
             return redirect(url_for('enternames', id=id+1))
