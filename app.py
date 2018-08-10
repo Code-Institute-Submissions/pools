@@ -222,6 +222,12 @@ def rules():
 if __name__ == '__main__':
     # app.jinja_env.auto_reload = True
     # app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # app.run(host='0.0.0.0', port=5000, debug=True)
     # app.run(debug=True)
     #app.run(debug=True, host='0.0.0.0')
+    # app.jinja_env.auto_reload = True
+    # app.config['TEMPLATES_AUTO_RELOAD'] = True
+    # app.run(debug=True)
+    app.run(host = os.environ.get("IP"),
+            port = int(os.environ.get("PORT")),
+            debug = True)
