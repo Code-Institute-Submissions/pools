@@ -4,7 +4,7 @@ from game import Question, Player, calcWinner
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'nusmmirhdl4472'
+# app.config['SECRET_KEY'] = 'nusmmirhdl4472'
 
 games = [
     {"game": 1,
@@ -222,5 +222,8 @@ def rules():
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=True)
+    app.run(host=os.environ.get('IP'),
+            port=int(os.environ.get('PORT')),
+            debug=True)
+    # app.run(debug=True)
     #app.run(debug=True, host='0.0.0.0')
