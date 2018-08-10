@@ -4,7 +4,7 @@ from game import Question, Player, calcWinner
 
 app = Flask(__name__)
 
-# app.config['SECRET_KEY'] = 'nusmmirhdl4472'
+app.config['SECRET_KEY'] = 'nusmmirhdl4472'
 
 games = [
     {"game": 1,
