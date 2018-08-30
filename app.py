@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import PlayerNumForm, NameForm, AnswerForm
 from game import Question, Player, calcWinner
@@ -229,5 +230,5 @@ if __name__ == '__main__':
     # app.config['TEMPLATES_AUTO_RELOAD'] = True
     # app.run(debug=True)
     app.run(host = os.environ.get("IP"),
-            port = int(os.environ.get("PORT")),
+            port = int(os.environ.get("PORT", 5000)),
             debug = True)
