@@ -121,6 +121,11 @@ def game(id, pNum, attempt):
     if form.validate_on_submit():
         answer = form.answer.data
         players[0].answer = answer
+        res = results[id-1]
+        if answer == res:
+            flash(f'You are correct {players[0].name}', 'success')
+            players[0].score = players[0].score +1
+            return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
     return render_template('game.html', title='game', form=form, games=games,
                                    id=id, player=players, fixList=fixList, results=results, pNum=pNum)
 
