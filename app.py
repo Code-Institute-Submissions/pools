@@ -79,7 +79,7 @@ def newgame():
         # for player in range(numPlayers):
         player = Player()
         players.append(player)
-        return redirect(url_for('enternames', id=1, players=players))
+        return redirect(url_for('enternames', id=1))
     return render_template('newgame.html', title='newgame', form=form )
 
 
