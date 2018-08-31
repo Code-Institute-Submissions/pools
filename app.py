@@ -76,9 +76,9 @@ def newgame():
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
         flash(f'{numPlayers} player game created!', 'dark')
-        for player in range(numPlayers):
-            player = Player()
-            players.append(player)
+        # for player in range(numPlayers):
+        player = Player()
+        players.append(player)
         return redirect(url_for('enternames', id=1))
     return render_template('newgame.html', title='newgame', form=form )
 
