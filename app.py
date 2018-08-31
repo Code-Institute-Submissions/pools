@@ -71,7 +71,7 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    # resetGame()
+    resetGame()
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
