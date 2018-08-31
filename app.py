@@ -106,7 +106,7 @@ def enternames(id):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        players[0].name = name
+        player.name = name
         flash(f'Good luck {name}!! ', 'dark')
         # if id < len(players):
         #     return redirect(url_for('enternames', id=id+1))
@@ -121,8 +121,8 @@ def game(id, pNum, attempt):
     if form.validate_on_submit():
         answer = form.answer.data
         if players:
-            players[0].answer = answer
-        res = results[id-1]
+            player.answer = answer
+        res = 1
         if answer == res:
             flash(f'You are correct {players[0].name}', 'success')
             players[0].score = players[0].score +1
