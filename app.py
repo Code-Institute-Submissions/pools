@@ -74,9 +74,9 @@ def newgame():
     resetGame()
     form = PlayerNumForm()
     if form.validate_on_submit():
-        numPlayers = form.players.data
+        numPlayers = int(form.players.data)
         flash(f'{numPlayers} player game created!', 'dark')
-        for player in range(int(numPlayers)):
+        for player in range(numPlayers):
             player = Player()
             players.append(player)
         return redirect(url_for('enternames', id=1))
@@ -108,70 +108,21 @@ def enternames(id):
         name = form.playername.data
         players[0].name = name
         flash(f'Good luck {name}!! ', 'dark')
-        if id < len(players):
-            return redirect(url_for('enternames', id=id+1))
-        else:
-            return redirect(url_for('game', id=1, pNum=1, attempt=1))
+        # if id < len(players):
+        #     return redirect(url_for('enternames', id=id+1))
+        # else:
+        return redirect(url_for('game', id=1, pNum=1, attempt=1))
     return render_template('enternames.html', title='names', form=form, id=id, players=players)
 
 
 @app.route("/game/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, pNum, attempt):
     form = AnswerForm()
-    for game in games:
-        if form.validate_on_submit():
-            answer = form.answer.data
-            players[0].answer = answer
-            res = results[0]
-            if id == len(games):
-                if len(players) > pNum:
-                    if attempt == 1:
-                        if answer != res:
-                            flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'dark')
-                            return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
-                        else:
-                            players[0].score = players[0].score + int(answer)
-                            return redirect(url_for('game', id=1, pNum=pNum+1, attempt=1))
-                    else:
-                        if answer == res:
-                            flash(f'You are correct {players[0].name}', 'success')
-                            players[0].score = players[0].score +1
-                            return redirect(url_for('game', id=1, pNum=pNum+1, attempt=1))
-                        else:
-                            return redirect(url_for('game', id=1, pNum=pNum+1, attempt=1))
-                else:
-                    if attempt == 1:
-                        if answer != res:
-                            flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'dark')
-                            return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
-                        else:
-                            players[0].score = players[0].score + int(answer)
-                            return redirect(url_for('winner'))
-                    else:
-                        if answer != res:
-                            return redirect(url_for('winner'))
-                        else:
-                            players[0].score = players[0].score + 1
-                            return redirect(url_for('winner'))
-            if id < len(games):
-                    secondAttempt = False
-                    if answer != res:
-                        if attempt < 2:
-                            flash(f'One more go {players[0].name}, your first guess was: {answer} ', 'dark')
-                            secondAttempt = True
-                            return redirect(url_for('game', id=id, pNum=pNum, attempt=attempt+1))
-                        else:
-                            flash(f'Wrong again {players[0].name}! ', 'warning')
-                            return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
-                    else:
-                        flash(f'You are correct {players[0].name}', 'dark')
-                        if secondAttempt == False:
-                            players[0].score = players[0].score + int(answer)
-                        else:
-                            players[0].score = players[0].score +1
-                        return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
-        return render_template('game.html', title='game', form=form, games=games,
-                                       id=id, player=players, fixList=fixList, results=results, pNum=pNum)
+    if form.validate_on_submit():
+        answer = form.answer.data
+        players[0].answer = answer
+    return render_template('game.html', title='game', form=form, games=games,
+                                   id=id, player=players, fixList=fixList, results=results, pNum=pNum)
 
 
 
