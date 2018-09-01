@@ -125,7 +125,8 @@ def game(id, pNum, attempt):
         # players[0].answer = answer
         res = 1
         if answer == res:
-            flash(f'You are correct {player.name}', 'success')
+            # flash(f'You are correct {players[0].name}', 'success')
+            flash(f'You are correct', 'success')
             # players[0].score = players[0].score +1
             return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
     return render_template('game.html', title='game', form=form, games=games,
