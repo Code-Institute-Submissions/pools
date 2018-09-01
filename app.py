@@ -120,7 +120,6 @@ def enternames(id):
 @app.route("/game/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, pNum, attempt):
     form = AnswerForm()
-    print(players[0].name)
     if form.validate_on_submit():
         answer = form.answer.data
         # players[0].answer = answer
