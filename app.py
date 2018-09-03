@@ -114,7 +114,7 @@ def enternames(id):
         #     return redirect(url_for('enternames', id=id+1))
         # else:
         return redirect(url_for('game', id=1, pNum=1, attempt=1))
-    return render_template('enternames.html', title='names', form=form, id=id, players=players)
+    return render_template('enternames.html', form=form, id=id)
 
 
 @app.route("/game/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
@@ -129,7 +129,7 @@ def game(id, pNum, attempt):
             flash(f'You are correct', 'success')
             # players[0].score = players[0].score +1
             return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
-    return render_template('game.html', title='game', form=form, games=games,
+    return render_template('game.html', form=form, games=games,
                                    id=id, players=players, fixList=fixList, results=results, pNum=pNum)
 
 
