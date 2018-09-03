@@ -104,29 +104,31 @@ def enternames(id):
         name = form.playername.data
         player = Player(name)
         players.append(player)
-        players[0].name = name
+        # players[0].name = name
         flash(f'Good luck {name}!! ', 'dark')
         # if id < len(players):
         #     return redirect(url_for('enternames', id=id+1))
         # else:
-        return redirect(url_for('game', id=1, pNum=1, attempt=1))
+        return redirect(url_for('game', id=1, name=name, attempt=1))
     return render_template('enternames.html', form=form, id=id)
 
 
-@app.route("/game/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
-def game(id, pNum, attempt):
+@app.route("/game/<int:id>/<name>/<int:attempt>", methods=['GET', 'POST'])
+def game(id, name, attempt):
     form = AnswerForm()
+    player = players[0]
+    name = player.name
     if form.validate_on_submit():
         answer = form.answer.data
         # players[0].answer = answer
         res = 1
         if answer == res:
             # flash(f'You are correct {players[0].name}', 'success')
-            flash(f'You are correct', 'success')
+            flash(f'You are correct {player.name}', 'success')
             # players[0].score = players[0].score +1
-            return redirect(url_for('game', id=id+1, pNum=pNum, attempt=1))
+            return redirect(url_for('game', id=id+1, name=name, attempt=1))
     return render_template('game.html', form=form, games=games,
-                                   id=id, players=players, fixList=fixList, results=results, pNum=pNum)
+                                   id=id, players=players, fixList=fixList, results=results, player=player, name=name)
 
 
 
