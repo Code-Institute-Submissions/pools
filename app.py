@@ -62,7 +62,6 @@ def getFixtures():
 # getHighscores()
 getFixtures()
 
-
 @app.route("/")
 @app.route("/home")
 def home():
@@ -76,9 +75,6 @@ def newgame():
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
         flash(f'{numPlayers} player game created!', 'dark')
-        # for player in range(numPlayers):
-        # player = Player()
-        # players.append(player)
         return redirect(url_for('enternames', id=1))
     return render_template('newgame.html', title='newgame', form=form )
 
@@ -108,7 +104,7 @@ def enternames(id):
         name = form.playername.data
         player = Player(name)
         players.append(player)
-        # players[0].name = name
+        players[0].name = name
         flash(f'Good luck {name}!! ', 'dark')
         # if id < len(players):
         #     return redirect(url_for('enternames', id=id+1))
