@@ -7,7 +7,6 @@
       <legend class="margin-bottom mb-4">Enter your name below Player {{ id }}</legend>
       <div class="form-group">
         {{ form.playername.label(class="form-control-label") }}
-
         {% if form.playername.errors %}
           {{ form.playername(class="form-control form-control-lg is-invalid") }}
           <div class="invalid-feedback">
