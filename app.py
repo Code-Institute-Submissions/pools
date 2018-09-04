@@ -130,7 +130,7 @@ def game(id, name, attempt):
                 # players[0].score = players[0].score +1
                 return redirect(url_for('game', id=id+1, name=name, attempt=1))
         else:
-            return redirect(url_for('winner' name=name))
+            return redirect(url_for('winner'))
     return render_template('game.html', form=form, games=games,
                                    id=id, players=players, fixList=fixList, results=results, name=name)
 
