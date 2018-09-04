@@ -116,11 +116,9 @@ def enternames(id):
 @app.route("/game/<int:id>/<name>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, name, attempt):
     form = AnswerForm()
-    # player = players[0]
     name = name
     if form.validate_on_submit():
         answer = form.answer.data
-        # players[0].answer = answer
         res = 1
         if answer == res:
             # flash(f'You are correct {players[0].name}', 'success')
@@ -128,7 +126,7 @@ def game(id, name, attempt):
             # players[0].score = players[0].score +1
             return redirect(url_for('game', id=id+1, name=name, attempt=1))
     return render_template('game.html', form=form, games=games,
-                                   id=id, players=players, fixList=fixList, results=results, player=player, name=name)
+                                   id=id, players=players, fixList=fixList, results=results, name=name)
 
 
 
