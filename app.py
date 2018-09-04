@@ -130,7 +130,7 @@ def game(id, name, attempt):
                 # players[0].score = players[0].score +1
                 return redirect(url_for('game', id=id+1, name=name, attempt=1))
         else:
-            return redirect(url_for('winner'))
+            return redirect(url_for('winner' name=name))
     return render_template('game.html', form=form, games=games,
                                    id=id, players=players, fixList=fixList, results=results, name=name)
 
@@ -140,8 +140,8 @@ def game(id, name, attempt):
 def winner():
     if len(players) == 1:
         with open('scores.txt', 'a') as w:
-            name = players[0].name
-            score = str(players[0].score)
+            name = name
+            score = 101
             w.write(f'{name}:{score}\n')
             if len(highscores) > 0:
                 highscore()
@@ -150,7 +150,7 @@ def winner():
         players.sort(key=lambda x: x.score, reverse=True)
         if len(players) > 1:
             calcWinner(players[0], players[1])
-    return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner, highscores=highscores)
+    return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
 
 

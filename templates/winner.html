@@ -5,7 +5,7 @@
     <section class="winner-section">
       <h2 class="winner">Result</h2>
       {% for player in players %}
-        <p class="result">{{ player.name }} scored {{ player.score }} points!</p>
+        <p class="result">{{ name }} scored {{ score }} points!</p>
       {% endfor %}
       {% if players |length > 1 %}
         <p class="result">Result: {{ calcWinner(players[0], players[1]) }}</p>
