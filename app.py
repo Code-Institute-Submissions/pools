@@ -140,7 +140,7 @@ def game(id, name, attempt):
 def winner():
     if len(players) == 1:
         with open('scores.txt', 'a') as w:
-            name = name
+            name = 'dan'
             score = 101
             w.write(f'{name}:{score}\n')
             if len(highscores) > 0:
