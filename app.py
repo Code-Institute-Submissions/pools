@@ -117,17 +117,17 @@ def enternames(id):
 def game(id, name, attempt):
     form = AnswerForm()
     name = name
+    player = players[0]
     if form.validate_on_submit():
         plrAnswer = form.answer.data
         correctRes = results[id-1]
-        score = players[0].score
         if id < len(games):
             if plrAnswer != correctRes:
                 flash(f'Wrong answer {name}, you have one more attempt', 'success')
                 return redirect(url_for('game', id=id, name=name, attempt=attempt+1))
             else:
                 flash(f'You are correct {name}', 'success')
-                score = score + 1
+                # score = score + 1
                 return redirect(url_for('game', id=id+1, name=name, attempt=1))
         else:
             return redirect(url_for('winner'))
