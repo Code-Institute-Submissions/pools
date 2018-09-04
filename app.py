@@ -138,11 +138,13 @@ def game(id, name, attempt):
 
 @app.route("/winner", methods=['GET', 'POST'])
 def winner():
+    name = players[0].name
+    score = 101
     if len(players) == 1:
         with open('scores.txt', 'a') as w:
-            name = 'dan'
-            score = 101
-            w.write(f'{name}:{score}\n')
+            pName = 'dan'
+            pScore = 101
+            w.write(f'{pName}:{pScore}\n')
             if len(highscores) > 0:
                 highscore()
     else:
@@ -150,7 +152,7 @@ def winner():
         players.sort(key=lambda x: x.score, reverse=True)
         if len(players) > 1:
             calcWinner(players[0], players[1])
-    return render_template('winner.html', players=players, calcWinner=calcWinner, highscores=highscores)
+    return render_template('winner.html', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
 
 

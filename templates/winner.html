@@ -4,7 +4,7 @@
   {% block content %}
     <section class="winner-section">
       <h2 class="winner">Result</h2>
-      {% for player in players %}
+      {% for player in range(1) %}
         <p class="result">{{ name }} scored {{ score }} points!</p>
       {% endfor %}
       {% if players |length > 1 %}
