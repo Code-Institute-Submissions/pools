@@ -118,10 +118,13 @@ def game(id, name, attempt):
     form = AnswerForm()
     name = name
     if form.validate_on_submit():
-        answer = form.answer.data
-        res = results[id-1]
-        if answer == res:
-            # flash(f'You are correct {players[0].name}', 'success')
+        plrAnswer = form.answer.data
+        correctRes = results[id-1]
+        if plrAnswer != correctRes:
+            flash(f'Wrong answer {name}, you have one more attempt', 'success')
+            # players[0].score = players[0].score +1
+            return redirect(url_for('game', id=id, name=name, attempt=attempt+1))
+        else:
             flash(f'You are correct {name}', 'success')
             # players[0].score = players[0].score +1
             return redirect(url_for('game', id=id+1, name=name, attempt=1))
