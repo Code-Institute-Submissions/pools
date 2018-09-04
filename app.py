@@ -119,7 +119,7 @@ def game(id, name, attempt):
     name = name
     if form.validate_on_submit():
         answer = form.answer.data
-        res = 1
+        res = results[id-1]
         if answer == res:
             # flash(f'You are correct {players[0].name}', 'success')
             flash(f'You are correct {name}', 'success')
