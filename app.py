@@ -120,14 +120,14 @@ def game(id, name, attempt):
     if form.validate_on_submit():
         plrAnswer = form.answer.data
         correctRes = results[id-1]
+        score = players[0].score
         if id < len(games):
             if plrAnswer != correctRes:
                 flash(f'Wrong answer {name}, you have one more attempt', 'success')
-                # players[0].score = players[0].score +1
                 return redirect(url_for('game', id=id, name=name, attempt=attempt+1))
             else:
                 flash(f'You are correct {name}', 'success')
-                # players[0].score = players[0].score +1
+                score = score + 1
                 return redirect(url_for('game', id=id+1, name=name, attempt=1))
         else:
             return redirect(url_for('winner'))
@@ -139,7 +139,7 @@ def game(id, name, attempt):
 @app.route("/winner", methods=['GET', 'POST'])
 def winner():
     name = players[0].name
-    score = 101
+    score = players[0].score
     if len(players) == 1:
         with open('scores.txt', 'a') as w:
             pName = 'dan'
