@@ -150,7 +150,7 @@ def winner():
         players.sort(key=lambda x: x.score, reverse=True)
         if len(players) > 1:
             calcWinner(players[0], players[1])
-    return render_template('winner.html', title='winner', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
+    return render_template('winner.html', players=players, calcWinner=calcWinner, highscores=highscores,  score=score)
 
 
 
