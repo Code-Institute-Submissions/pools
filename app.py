@@ -102,13 +102,9 @@ def enternames(id):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        player = Player(name)
-        players.append(player)
-        # players[0].name = name
+        # player = Player(name)
+        # players.append(player)
         flash(f'Good luck {name}!! ', 'dark')
-        # if id < len(players):
-        #     return redirect(url_for('enternames', id=id+1))
-        # else:
         return redirect(url_for('game', id=1, name=name, attempt=1))
     return render_template('enternames.html', form=form, id=id)
 
@@ -117,7 +113,7 @@ def enternames(id):
 def game(id, name, attempt):
     form = AnswerForm()
     name = name
-    player = players[0]
+    player = Player(name)
     if form.validate_on_submit():
         plrAnswer = form.answer.data
         correctRes = results[id-1]
@@ -127,19 +123,25 @@ def game(id, name, attempt):
                 return redirect(url_for('game', id=id, name=name, attempt=attempt+1))
             else:
                 flash(f'You are correct {name}', 'success')
-                # score = score + 1
+                player.score = player.score +1
+                print(player.score)
+                score = player.score
                 return redirect(url_for('game', id=id+1, name=name, attempt=1))
         else:
-            return redirect(url_for('winner'))
+            score = 8
+            return redirect(url_for('winner', name=name, score=score))
     return render_template('game.html', form=form, games=games,
                                    id=id, players=players, fixList=fixList, results=results, name=name)
 
 
 
-@app.route("/winner", methods=['GET', 'POST'])
-def winner():
-    name = players[0].name
-    score = players[0].score
+@app.route("/winner/<string:name>/<int:score>", methods=['GET', 'POST'])
+def winner(name, score):
+    # name = players[0].name
+    name = name
+    print(name)
+    print(score)
+    # score = score
     if len(players) == 1:
         with open('scores.txt', 'a') as w:
             pName = 'dan'
