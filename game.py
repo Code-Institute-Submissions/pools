@@ -55,6 +55,15 @@ class Player:
         answer = input(f'Enter your prediction {self.name}.. ')
         self.answer = int(answer)
 
+    def incScore(self):
+        self.score = self.score +1
+
+    def getName(self):
+        return self.name
+
+    def getScore(self):
+        return self.score
+
 # Open file class for set up and taerdown of files
 class Open_File():
     def __init__(self, filename, mode):

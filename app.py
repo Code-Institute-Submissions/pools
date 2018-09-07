@@ -105,30 +105,31 @@ def enternames(id):
         # player = Player(name)
         # players.append(player)
         flash(f'Good luck {name}!! ', 'dark')
-        return redirect(url_for('game', id=1, name=name, attempt=1))
+        return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
     return render_template('enternames.html', form=form, id=id)
 
 
-@app.route("/game/<int:id>/<name>/<int:attempt>", methods=['GET', 'POST'])
-def game(id, name, attempt):
+@app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
+def game(id, name, score, attempt):
     form = AnswerForm()
-    name = name
-    player = Player(name)
     if form.validate_on_submit():
+        name = name
+        player = Player(name)
         plrAnswer = form.answer.data
         correctRes = results[id-1]
         if id < len(games):
             if plrAnswer != correctRes:
                 flash(f'Wrong answer {name}, you have one more attempt', 'success')
-                return redirect(url_for('game', id=id, name=name, attempt=attempt+1))
+                return redirect(url_for('game', id=id, name=name, score=score, attempt=attempt+1))
             else:
                 flash(f'You are correct {name}', 'success')
-                player.score = player.score +1
-                print(player.score)
-                score = player.score
-                return redirect(url_for('game', id=id+1, name=name, attempt=1))
+                return redirect(url_for('game', id=id+1, name=name, attempt=1, score=score+1))
         else:
-            score = 8
+            # if plrAnswer != correctRes:
+            #     flash(f'Wrong answer {name}, you have one more attempt', 'success')
+            #     return redirect(url_for('game', id=id, name=name, score=score, attempt=attempt+1))
+            # else:
+            #     flash(f'You are correct {name}', 'success')
             return redirect(url_for('winner', name=name, score=score))
     return render_template('game.html', form=form, games=games,
                                    id=id, players=players, fixList=fixList, results=results, name=name)
@@ -137,11 +138,7 @@ def game(id, name, attempt):
 
 @app.route("/winner/<string:name>/<int:score>", methods=['GET', 'POST'])
 def winner(name, score):
-    # name = players[0].name
     name = name
-    print(name)
-    print(score)
-    # score = score
     if len(players) == 1:
         with open('scores.txt', 'a') as w:
             pName = 'dan'
