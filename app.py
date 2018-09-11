@@ -34,6 +34,19 @@ topTen = []
 def resetGame():
     del players[:]
 
+def resetHighscores():
+    del highscores[:]
+
+
+#read last line of scores.txt and add to highscores array
+def addToHighscores():
+    with open('scores.txt', 'r') as r:
+        player = {}
+        last_line = r.readlines()[-1]
+        name, score = last_line.split(':')
+        player['name'] = name
+        player['score'] = score
+        highscores.append(player)
 
 #function to extract scores from scores.txt and create dictionary of highscore player objects
 def getHighscores():
@@ -59,7 +72,10 @@ def getFixtures():
         results.append(res)
 
 
-# getHighscores()
+getHighscores()
+sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
+topTen = sortedHighscores[0:10]
+
 getFixtures()
 
 @app.route("/")
@@ -79,31 +95,12 @@ def newgame():
     return render_template('newgame.html', title='newgame', form=form )
 
 
-# @app.route("/enternames/<int:id>", methods=['GET', 'POST'])
-# def enternames(id):
-#     form = NameForm()
-#     if form.validate_on_submit():
-#         if id < len(players):
-#             name = form.playername.data
-#             players[id].name = name
-#             flash(f'Good luck {name}!! ', 'dark')
-#             return redirect(url_for('enternames', id=id+1))
-#         elif len(players) == 1:
-#             name = form.playername.data
-#             players[0].name = name
-#             flash(f'Good luck {name}!! ', 'dark')
-#             return redirect(url_for('game', id=1, pNum=1, attempt=1))
-#         else:
-#             return redirect(url_for('game', id=1, pNum=1, attempt=1))
-#     return render_template('enternames.html', title='names', form=form, id=id, players=players)
 
 @app.route("/enternames/<int:id>", methods=['GET', 'POST'])
 def enternames(id):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        # player = Player(name)
-        # players.append(player)
         flash(f'Good luck {name}!! ', 'dark')
         return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
     return render_template('enternames.html', form=form, id=id)
@@ -144,7 +141,6 @@ def game(id, name, score, attempt):
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}', 'dark')
                     return redirect(url_for('winner', name=name, score=score))
-                    # return redirect(url_for('game', id=3, name=name, score=score, attempt=2))
                 else:
                     score = score +1
                     return redirect(url_for('winner', name=name, score=score))
@@ -156,42 +152,31 @@ def game(id, name, score, attempt):
 @app.route("/winner/<string:name>/<int:score>", methods=['GET', 'POST'])
 def winner(name, score):
     name = name
-    if len(players) == 1:
-        with open('scores.txt', 'a') as w:
-            pName = 'dan'
-            pScore = 101
-            w.write(f'{pName}:{pScore}\n')
-            if len(highscores) > 0:
-                highscore()
-    else:
-        # Sort players by score
-        players.sort(key=lambda x: x.score, reverse=True)
-        if len(players) > 1:
-            calcWinner(players[0], players[1])
+    score = score
+    # if len(players) == 1:
+    with open('scores.txt', 'a') as w:
+        name = name
+        score = score
+        w.write(f'{name}:{score}\n')
+        # if len(highscores) > 0:
+        #     addToHighscores()
+    # else:
+    #     # Sort players by score
+    #     players.sort(key=lambda x: x.score, reverse=True)
+    #     if len(players) > 1:
+    #         calcWinner(players[0], players[1])
     return render_template('winner.html', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
-
-
-#read last line of scores.txt and add to highscores array
-def highscore():
-    with open('scores.txt', 'r') as r:
-        player = {}
-        last_line = r.readlines()[-1]
-        name, score = last_line.split(':')
-        player['name'] = name
-        player['score'] = score
-        highscores.append(player)
-
-
-getHighscores()
-#sort highscores into top ten
-sortedArray = sorted(highscores, key=lambda item: item['score'], reverse=True)
-topTen = sortedArray[0:10]
-
+print(highscores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 def leaderboard():
-    return render_template('leaderboard.html', title='leaderboard', highscores=highscores, sortedArray=sortedArray, topTen=topTen)
+    resetHighscores()
+    getHighscores()
+    print(highscores)
+    sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
+    topTen = sortedHighscores[0:10]
+    return render_template('leaderboard.html', title='leaderboard', highscores=highscores, sortedHighscores=sortedHighscores, topTen=topTen)
 
 
 @app.route("/rules")
