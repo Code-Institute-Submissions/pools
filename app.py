@@ -102,12 +102,12 @@ def enternames(id):
     if form.validate_on_submit():
         name = form.playername.data
         flash(f'Good luck {name}!! ', 'dark')
-        return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
+        return redirect(url_for('game', id=1, pNum=1, name=name, score=0, attempt=1))
     return render_template('enternames.html', form=form, id=id)
 
 
-@app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
-def game(id, name, score, attempt):
+@app.route("/game/<int:id>/<int:pNum>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
+def game(id, pNum, name, score, attempt):
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
@@ -118,25 +118,25 @@ def game(id, name, score, attempt):
             if attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=id, name=name, score=score, attempt=2))
+                    return redirect(url_for('game', id=id, pNum=pNum, name=name, score=score, attempt=2))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, name=name, score=score+plrAnswer, attempt=1))
+                    return redirect(url_for('game', id=id+1, pNum=pNum, name=name, score=score+plrAnswer, attempt=1))
             elif attempt == 2:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}', 'dark')
-                    return redirect(url_for('game', id=id+1, name=name, score=score, attempt=1))
+                    return redirect(url_for('game', id=id+1, pNum=pNum, name=name, score=score, attempt=1))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, name=name, score=score+1, attempt=1))
+                    return redirect(url_for('game', id=id+1, pNum=pNum, name=name, score=score+1, attempt=1))
         elif id == 3:
             if attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=3, name=name, score=score, attempt=2))
+                    return redirect(url_for('game', id=3, pNum=pNum, name=name, score=score, attempt=2))
                 else:
                     score = score + plrAnswer
-                    return redirect(url_for('winner', name=name, score=score))
+                    return redirect(url_for('winner', pNum=pNum, name=name, score=score))
             if attempt == 2:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}', 'dark')
