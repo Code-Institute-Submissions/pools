@@ -91,19 +91,23 @@ def newgame():
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
         flash(f'{numPlayers} player game created!', 'dark')
-        return redirect(url_for('enternames', id=1))
+        return redirect(url_for('enternames', id=1, numPlayers=numPlayers))
     return render_template('newgame.html', title='newgame', form=form )
 
 
 
-@app.route("/enternames/<int:id>", methods=['GET', 'POST'])
-def enternames(id):
+@app.route("/enternames/<int:id>/<int:numPlayers>", methods=['GET', 'POST'])
+def enternames(id, numPlayers):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
+        players.append(name)
         flash(f'Good luck {name}!! ', 'dark')
-        return redirect(url_for('game', id=1, pNum=1, name=name, score=0, attempt=1))
-    return render_template('enternames.html', form=form, id=id)
+        if id < numPlayers:
+            return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
+        elif id == numPlayers:
+            return redirect(url_for('game', id=1, pNum=1, name=players[0], score=0, attempt=1))
+    return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
 
 
 @app.route("/game/<int:id>/<int:pNum>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
@@ -114,6 +118,7 @@ def game(id, pNum, name, score, attempt):
         player = Player(name)
         plrAnswer = form.answer.data
         correctRes = results[id-1]
+        #questions 1 and 2 of 3 1 player game
         if id <= 2:
             if attempt == 1:
                 if plrAnswer != correctRes:
@@ -129,6 +134,7 @@ def game(id, pNum, name, score, attempt):
                 else:
                     flash(f'You are correct {name}', 'success')
                     return redirect(url_for('game', id=id+1, pNum=pNum, name=name, score=score+1, attempt=1))
+        #last question 1 player game
         elif id == 3:
             if attempt == 1:
                 if plrAnswer != correctRes:
@@ -145,7 +151,7 @@ def game(id, pNum, name, score, attempt):
                     score = score +1
                     return redirect(url_for('winner', name=name, score=score))
     return render_template('game.html', form=form, games=games,
-                                   id=id, players=players, fixList=fixList, results=results, name=name)
+                                   id=id, players=players, fixList=fixList, results=results, name=name, pNum=pNum)
 
 
 
