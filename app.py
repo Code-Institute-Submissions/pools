@@ -101,48 +101,49 @@ def enternames(id, numPlayers):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        players.append(name)
+        player = Player(name)
+        players.append(player)
         flash(f'Good luck {name}!! ', 'dark')
-        if id < numPlayers:
+        if numPlayers == 1:
+            return redirect(url_for('game', id=1, pNum=1, name=name, score=0, attempt=1))
+        elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
-            return redirect(url_for('game', id=1, pNum=1, name=players[0], score=0, attempt=1))
+            return redirect(url_for('multiplayer', id=1, pNum=1, score=0, attempt=1))
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
 
 
-@app.route("/game/<int:id>/<int:pNum>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
-def game(id, pNum, name, score, attempt):
+@app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
+def game(id, name, score, attempt):
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
         player = Player(name)
         plrAnswer = form.answer.data
         correctRes = results[id-1]
-        #questions 1 and 2 of 3 1 player game
         if id <= 2:
             if attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=id, pNum=pNum, name=name, score=score, attempt=2))
+                    return redirect(url_for('game', id=id, name=name, score=score, attempt=2))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, pNum=pNum, name=name, score=score+plrAnswer, attempt=1))
+                    return redirect(url_for('game', id=id+1, name=name, score=score+plrAnswer, attempt=1))
             elif attempt == 2:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}', 'dark')
-                    return redirect(url_for('game', id=id+1, pNum=pNum, name=name, score=score, attempt=1))
+                    return redirect(url_for('game', id=id+1, name=name, score=score, attempt=1))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, pNum=pNum, name=name, score=score+1, attempt=1))
-        #last question 1 player game
+                    return redirect(url_for('game', id=id+1, name=name, score=score+1, attempt=1))
         elif id == 3:
             if attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=3, pNum=pNum, name=name, score=score, attempt=2))
+                    return redirect(url_for('game', id=3, name=name, score=score, attempt=2))
                 else:
                     score = score + plrAnswer
-                    return redirect(url_for('winner', pNum=pNum, name=name, score=score))
+                    return redirect(url_for('winner', name=name, score=score))
             if attempt == 2:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}', 'dark')
@@ -151,7 +152,27 @@ def game(id, pNum, name, score, attempt):
                     score = score +1
                     return redirect(url_for('winner', name=name, score=score))
     return render_template('game.html', form=form, games=games,
-                                   id=id, players=players, fixList=fixList, results=results, name=name, pNum=pNum)
+                                   id=id, players=players, fixList=fixList, results=results, name=name)
+
+
+@app.route("/multiplayer/<int:id>/<int:pNum>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
+def multiplayer(id, pNum,score, attempt):
+    form = AnswerForm()
+    multiplayers = players    
+    if form.validate_on_submit():
+        name = multiplayers[pNum-1].name
+        plrAnswer = form.answer.data
+        correctRes = results[id-1]
+        # if id <= 2:
+        if attempt == 1:
+            if plrAnswer != correctRes:
+                flash(f'Wrong answer {name}, you have one more attempt', 'dark')
+                return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
+            else:
+                flash(f'You are correct {name}', 'success')
+                return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+plrAnswer, attempt=1))
+    return render_template('multiplayer.html', form=form, games=games,
+                                   id=id, players=players, fixList=fixList, results=results, name=multiplayers, pNum=pNum)
 
 
 
