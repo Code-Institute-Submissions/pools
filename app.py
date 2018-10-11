@@ -156,12 +156,12 @@ def game(id, name, score, attempt):
 
 
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
-def multiplayer(id, pNum,score, attempt):
+def multiplayer(id, pNum, score, attempt):
     form = AnswerForm()
     multiplayers = players
     if form.validate_on_submit():
         pNum = pNum
-        name = multiplayers[pNum].name
+        name = multiplayers[pNum-1].name
         plrAnswer = form.answer.data
         correctRes = results[id-1]
         # if id <= 2:
@@ -173,7 +173,7 @@ def multiplayer(id, pNum,score, attempt):
                 flash(f'You are correct {name}', 'success')
                 return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+plrAnswer, attempt=1))
     return render_template('multiplayer.html', form=form, games=games,
-                                   id=id, players=players, fixList=fixList, results=results, name=multiplayers, pNum=pNum)
+                                   id=id, players=players, fixList=fixList, results=results, name=multiplayers[pNum-1].name, pNum=pNum)
 
 
 
