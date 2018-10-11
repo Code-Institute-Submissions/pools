@@ -158,9 +158,10 @@ def game(id, name, score, attempt):
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, pNum,score, attempt):
     form = AnswerForm()
-    multiplayers = players    
+    multiplayers = players
     if form.validate_on_submit():
-        name = multiplayers[pNum-1].name
+        pNum = pNum
+        name = multiplayers[pNum].name
         plrAnswer = form.answer.data
         correctRes = results[id-1]
         # if id <= 2:
