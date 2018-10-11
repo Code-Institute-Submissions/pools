@@ -173,7 +173,7 @@ def multiplayer(id, pNum, score, attempt):
                 flash(f'You are correct {name}', 'success')
                 return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+plrAnswer, attempt=1))
     return render_template('multiplayer.html', form=form, games=games,
-                                   id=id, players=players, fixList=fixList, results=results, name=multiplayers[pNum-1].name, pNum=pNum)
+                                   id=id, fixList=fixList, results=results, pNum=pNum)
 
 
 
