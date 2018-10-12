@@ -166,7 +166,7 @@ def multiplayer(id, pNum, score, attempt):
     if form.validate_on_submit():
         plrAnswer = form.answer.data
         correctRes = results[id-1]
-        name = multiplayers[pNum-1].name
+        name = 'test'
         # if id <= 2:
         if attempt == 1:
             if plrAnswer != correctRes:
