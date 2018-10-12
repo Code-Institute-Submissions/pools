@@ -103,6 +103,7 @@ def enternames(id, numPlayers):
         name = form.playername.data
         player = Player(name)
         players.append(player)
+        print(f'players array length is: {len(players)}')
         flash(f'Good luck {name}!! ', 'dark')
         if numPlayers == 1:
             return redirect(url_for('game', id=1, pNum=1, name=name, score=0, attempt=1))
@@ -159,11 +160,11 @@ def game(id, name, score, attempt):
 def multiplayer(id, pNum, score, attempt):
     form = AnswerForm()
     multiplayers = players
+    # print(f'players array length is: {len(players)}')
     if form.validate_on_submit():
-        pNum = pNum
-        name = multiplayers[pNum-1].name
         plrAnswer = form.answer.data
         correctRes = results[id-1]
+        name = multiplayers[pNum-1].name
         # if id <= 2:
         if attempt == 1:
             if plrAnswer != correctRes:
@@ -179,8 +180,8 @@ def multiplayer(id, pNum, score, attempt):
             else:
                 flash(f'You are correct {name}', 'success')
                 return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+1, attempt=1))
-    return render_template('multiplayer.html', form=form, games=games,
-                                   id=id, fixList=fixList, results=results, pNum=pNum)
+    return render_template('multiplayer.html', form=form,
+                                   id=id, fixList=fixList, results=results, pName=multiplayers, pNum=pNum)
 
 
 
@@ -202,13 +203,13 @@ def winner(name, score):
     #         calcWinner(players[0], players[1])
     return render_template('winner.html', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
-print(highscores)
+# print(highscores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 def leaderboard():
     resetHighscores()
     getHighscores()
-    print(highscores)
+    # print(highscores)
     sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
     topTen = sortedHighscores[0:10]
     return render_template('leaderboard.html', title='leaderboard', highscores=highscores, sortedHighscores=sortedHighscores, topTen=topTen)
