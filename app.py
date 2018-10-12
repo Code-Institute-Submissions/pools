@@ -162,7 +162,6 @@ def game(id, name, score, attempt):
 def multiplayer(id, pNum, score, attempt):
     form = AnswerForm()
     multiplayers = createPlayerList()
-    pName = pName
     if form.validate_on_submit():
         plrAnswer = form.answer.data
         correctRes = results[id-1]
@@ -184,7 +183,7 @@ def multiplayer(id, pNum, score, attempt):
                 flash(f'You are correct {name}', 'success')
                 return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+1, attempt=1))
     return render_template('multiplayer.html', form=form,
-                                   id=id, fixList=fixList, results=results, pName=multiplayers, pNum=pNum)
+                                   id=id, fixList=fixList, results=results, multiplayers=multiplayers, pNum=pNum)
 
 
 
