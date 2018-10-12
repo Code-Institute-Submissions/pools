@@ -7,7 +7,7 @@
             <!-- <legend class="margin-bottom mb-4">Enter your prediction below.</legend> -->
                 <h3>Fixture: {{ id }}</h3>
                 <h2 class="fixture">{{ fixList[id-1] }}</h2>
-                <h4 class="player">Player: <span class="punderline">{{ pName[pNum-1].name }}</span></h4>
+                <h4 class="player">Player: <span class="punderline">{{ pName[count-pNum].name }}</span></h4>
             <div class="form-group">
               {{ form.answer.label(class="form-control-label") }}
               {% if form.answer.errors %}
