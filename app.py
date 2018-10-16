@@ -180,10 +180,28 @@ def multiplayer(id, pNum, score, attempt):
         name = getPlayerName(multiplayers, pNum)
         # 3 player game
         count = 3
-        # if on players 1 and 2
+        # number of fixtures limit
+        fixtures = 3
+        # do stuff only for 3 players
         if pNum <= count:
-            # if on last player, fixtures remaining
-            if pNum == 3:
+            # last player, last fixture
+            if id == 3 and pNum == 3:
+                print('last player, last fixture')
+                if attempt == 1:
+                    if plrAnswer != correctRes:
+                        flash(f'Wrong answer {name}', 'dark')
+                        return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
+                    else:
+                        flash(f'You are correct {name}', 'success')
+                        return redirect(url_for('winner', name=name, score=score))
+                elif attempt == 2:
+                    if plrAnswer != correctRes:
+                        flash(f'Wrong answer {name}', 'dark')
+                        return redirect(url_for('winner', name=name, score=score))
+                    else:
+                        flash(f'You are correct {name}', 'success')
+                        return redirect(url_for('winner', name=name, score=score))
+            elif pNum == 3:
                 if attempt == 1:
                     if plrAnswer != correctRes:
                         flash(f'Wrong answer {name}', 'dark')
@@ -198,6 +216,7 @@ def multiplayer(id, pNum, score, attempt):
                     else:
                         flash(f'You are correct {name}', 'success')
                         return redirect(url_for('multiplayer', id=id+1, pNum=1, score=score+1, attempt=1))
+            # if on last fixture
             elif attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')

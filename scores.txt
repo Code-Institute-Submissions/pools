@@ -4,8 +4,3 @@ John:4
 Claire:2
 Lenny:3
 Jim:2
-Joe:4
-Sam:3
-Phil:4
-Matt:2
-Mo:3
