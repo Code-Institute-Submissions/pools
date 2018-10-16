@@ -120,11 +120,10 @@ def enternames(id, numPlayers):
             # names = getPlayerNameList()
             # pName = names
             # print(pName)
-            print(len(players))
-            print(players[0].name)
-            print(players[1].name)
             return redirect(url_for('multiplayer', id=1, pNum=1, score=0, attempt=1))
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
+
+
 
 
 @app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
@@ -169,14 +168,12 @@ def game(id, name, score, attempt):
                                    id=id, players=players, fixList=fixList, results=results, name=name)
 
 multiplayers = createPlayerList()
+pNames = multiplayers
 
 
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, pNum, score, attempt):
     form = AnswerForm()
-    print(len(multiplayers))
-    print(players[0].name)
-    print(players[1].name)
     if form.validate_on_submit():
         plrAnswer = form.answer.data
         correctRes = results[id-1]
@@ -197,7 +194,7 @@ def multiplayer(id, pNum, score, attempt):
                 flash(f'You are correct {name}', 'success')
                 return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+1, attempt=1))
     return render_template('multiplayer.html', form=form,
-                                   id=id, fixList=fixList, results=results, pNum=pNum)
+                                   id=id, fixList=fixList, results=results, pNum=pNum, pNames=pNames)
 
 
 
