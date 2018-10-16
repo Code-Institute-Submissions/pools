@@ -87,6 +87,20 @@ def createPlayerList():
             multiplayers.append(player)
     return multiplayers
 
+# Get Player Name
+def getPlayerName(list, num):
+    name = list[num -1].name
+    return name
+
+# Get Player Name List
+def getPlayerNameList():
+    names = []
+    with open('player_Names.txt', 'r') as f:
+        for line in f:
+            name = line
+            names.append(name)
+        pName = names
+        return pName
 
 # Function to convert guess input to string
 def ansConv(guess):

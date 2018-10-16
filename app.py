@@ -1,7 +1,7 @@
-import os
+import os, json
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calcWinner, createPlayerList
+from game import Question, Player, calcWinner, createPlayerList, getPlayerName, getPlayerNameList
 
 app = Flask(__name__)
 
@@ -22,6 +22,7 @@ games = [
     ]
 
 # player objects
+# playersAll = [player_1, player_2, player_3, player_4, player_5]
 players = []
 fixList = []
 results = []
@@ -71,6 +72,9 @@ def getFixtures():
         fixList.append(fixture)
         results.append(res)
 
+def addToPlayersList(ply):
+    players.append(ply)
+
 
 getHighscores()
 sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
@@ -102,16 +106,23 @@ def enternames(id, numPlayers):
     if form.validate_on_submit():
         name = form.playername.data
         player = Player(name)
-        players.append(player)
-        with open('player_Names.txt', 'w') as w:
-            name = name
-            w.write(f'{name}\n')
+        # players.append(player)
+        addToPlayersList(player)
+        # with open('player_Names.txt', 'w') as w:
+        #     name = name
+        #     w.write(f'{name}\n')
         flash(f'Good luck {name}!! ', 'dark')
         if numPlayers == 1:
             return redirect(url_for('game', id=1, pNum=1, name=name, score=0, attempt=1))
         elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
+            # names = getPlayerNameList()
+            # pName = names
+            # print(pName)
+            print(len(players))
+            print(players[0].name)
+            print(players[1].name)
             return redirect(url_for('multiplayer', id=1, pNum=1, score=0, attempt=1))
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
 
@@ -157,16 +168,19 @@ def game(id, name, score, attempt):
     return render_template('game.html', form=form, games=games,
                                    id=id, players=players, fixList=fixList, results=results, name=name)
 
+multiplayers = createPlayerList()
+
 
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, pNum, score, attempt):
     form = AnswerForm()
-    multiplayers = createPlayerList()
+    print(len(multiplayers))
+    print(players[0].name)
+    print(players[1].name)
     if form.validate_on_submit():
         plrAnswer = form.answer.data
         correctRes = results[id-1]
-        pNum=pNum
-        name = multiplayers[pNum-1].name
+        name = getPlayerName(multiplayers, pNum)
         # if id <= 2:
         if attempt == 1:
             if plrAnswer != correctRes:
@@ -183,7 +197,7 @@ def multiplayer(id, pNum, score, attempt):
                 flash(f'You are correct {name}', 'success')
                 return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+1, attempt=1))
     return render_template('multiplayer.html', form=form,
-                                   id=id, fixList=fixList, results=results, multiplayers=multiplayers, pNum=pNum)
+                                   id=id, fixList=fixList, results=results, pNum=pNum)
 
 
 
