@@ -178,21 +178,40 @@ def multiplayer(id, pNum, score, attempt):
         plrAnswer = form.answer.data
         correctRes = results[id-1]
         name = getPlayerName(multiplayers, pNum)
-        # if id <= 2:
-        if attempt == 1:
-            if plrAnswer != correctRes:
-                flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
-            else:
-                flash(f'You are correct {name}', 'success')
-                return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+plrAnswer, attempt=1))
-        elif attempt == 2:
-            if plrAnswer != correctRes:
-                flash(f'Wrong answer {name}', 'dark')
-                return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score, attempt=1))
-            else:
-                flash(f'You are correct {name}', 'success')
-                return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+1, attempt=1))
+        # 3 player game
+        count = 3
+        # if on players 1 and 2
+        if pNum <= count:
+            # if on last player, fixtures remaining
+            if pNum == 3:
+                if attempt == 1:
+                    if plrAnswer != correctRes:
+                        flash(f'Wrong answer {name}', 'dark')
+                        return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
+                    else:
+                        flash(f'You are correct {name}', 'success')
+                        return redirect(url_for('multiplayer', id=id+1, pNum=1, score=score+1, attempt=1))
+                elif attempt == 2:
+                    if plrAnswer != correctRes:
+                        flash(f'Wrong answer {name}', 'dark')
+                        return redirect(url_for('multiplayer', id=id+1, pNum=1, score=score, attempt=1))
+                    else:
+                        flash(f'You are correct {name}', 'success')
+                        return redirect(url_for('multiplayer', id=id+1, pNum=1, score=score+1, attempt=1))
+            elif attempt == 1:
+                if plrAnswer != correctRes:
+                    flash(f'Wrong answer {name}, you have one more attempt', 'dark')
+                    return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
+                else:
+                    flash(f'You are correct {name}', 'success')
+                    return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+plrAnswer, attempt=1))
+            elif attempt == 2:
+                if plrAnswer != correctRes:
+                    flash(f'Wrong answer {name}', 'dark')
+                    return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score, attempt=1))
+                else:
+                    flash(f'You are correct {name}', 'success')
+                    return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+1, attempt=1))
     return render_template('multiplayer.html', form=form,
                                    id=id, fixList=fixList, results=results, pNum=pNum, pNames=pNames)
 
