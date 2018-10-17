@@ -178,28 +178,30 @@ def multiplayer(id, pNum, score, attempt):
         plrAnswer = form.answer.data
         correctRes = results[id-1]
         name = getPlayerName(multiplayers, pNum)
-        # 3 player game
-        count = 3
+        # count is the number of players
+        count = len(pNames)
         # number of fixtures limit
         fixtures = 3
         # do stuff only for 3 players
         if pNum <= count:
-            # last player, last fixture
+            # last player, last fixture, will be 10 in json
             if id == 3 and pNum == 3:
-                print('last player, last fixture')
                 if attempt == 1:
                     if plrAnswer != correctRes:
                         flash(f'Wrong answer {name}', 'dark')
                         return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
                     else:
-                        flash(f'You are correct {name}', 'success')
+                        multiplayers[pNum-1].incScore(1, plrAnswer)
+                        print(multiplayers[pNum-1].name)
+                        print(multiplayers[pNum-1].score)
                         return redirect(url_for('winner', name=name, score=score))
                 elif attempt == 2:
                     if plrAnswer != correctRes:
-                        flash(f'Wrong answer {name}', 'dark')
                         return redirect(url_for('winner', name=name, score=score))
                     else:
-                        flash(f'You are correct {name}', 'success')
+                        multiplayers[pNum-1].incScore(2, plrAnswer)
+                        print(multiplayers[pNum-1].name)
+                        print(multiplayers[pNum-1].score)
                         return redirect(url_for('winner', name=name, score=score))
             elif pNum == 3:
                 if attempt == 1:
@@ -208,6 +210,9 @@ def multiplayer(id, pNum, score, attempt):
                         return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
                     else:
                         flash(f'You are correct {name}', 'success')
+                        multiplayers[pNum-1].incScore(1, plrAnswer)
+                        print(multiplayers[pNum-1].name)
+                        print(multiplayers[pNum-1].score)
                         return redirect(url_for('multiplayer', id=id+1, pNum=1, score=score+1, attempt=1))
                 elif attempt == 2:
                     if plrAnswer != correctRes:
@@ -215,14 +220,20 @@ def multiplayer(id, pNum, score, attempt):
                         return redirect(url_for('multiplayer', id=id+1, pNum=1, score=score, attempt=1))
                     else:
                         flash(f'You are correct {name}', 'success')
+                        multiplayers[pNum-1].incScore(2, plrAnswer)
+                        print(multiplayers[pNum-1].name)
+                        print(multiplayers[pNum-1].score)
                         return redirect(url_for('multiplayer', id=id+1, pNum=1, score=score+1, attempt=1))
-            # if on last fixture
+            # fixture 1 all players
             elif attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
                     return redirect(url_for('multiplayer', id=id, pNum=pNum, score=score, attempt=2))
                 else:
                     flash(f'You are correct {name}', 'success')
+                    multiplayers[pNum-1].incScore(1, plrAnswer)
+                    print(multiplayers[pNum-1].name)
+                    print(multiplayers[pNum-1].score)
                     return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+plrAnswer, attempt=1))
             elif attempt == 2:
                 if plrAnswer != correctRes:
@@ -230,6 +241,9 @@ def multiplayer(id, pNum, score, attempt):
                     return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score, attempt=1))
                 else:
                     flash(f'You are correct {name}', 'success')
+                    multiplayers[pNum-1].incScore(2, plrAnswer)
+                    print(multiplayers[pNum-1].name)
+                    print(multiplayers[pNum-1].score)
                     return redirect(url_for('multiplayer', id=id, pNum=pNum+1, score=score+1, attempt=1))
     return render_template('multiplayer.html', form=form,
                                    id=id, fixList=fixList, results=results, pNum=pNum, pNames=pNames)
@@ -253,6 +267,26 @@ def winner(name, score):
     #     if len(players) > 1:
     #         calcWinner(players[0], players[1])
     return render_template('winner.html', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
+
+@app.route("/winnermult/<string:name>/<int:score>", methods=['GET', 'POST'])
+def winnermult(name, score):
+    name = name
+    score = score
+    # if len(players) == 1:
+    with open('scores.txt', 'a') as w:
+        name = name
+        score = score
+        w.write(f'{name}:{score}\n')
+        # if len(highscores) > 0:
+        #     addToHighscores()
+    # else:
+    #     # Sort players by score
+    #     players.sort(key=lambda x: x.score, reverse=True)
+    #     if len(players) > 1:
+    #         calcWinner(players[0], players[1])
+    return render_template('winnermult.html', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
+
+
 
 # print(highscores)
 

@@ -55,8 +55,12 @@ class Player:
         answer = input(f'Enter your prediction {self.name}.. ')
         self.answer = int(answer)
 
-    def incScore(self):
-        self.score = self.score +1
+    def incScore(self, attempt, guess):
+        if attempt == 1:
+            self.score = self.score + guess
+        elif attempt == 2:
+            self.score = self.score + 1
+        return self.score
 
     def getName(self):
         return self.name
