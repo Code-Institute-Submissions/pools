@@ -276,7 +276,7 @@ def winnermult():
     # Sort players by score
     multiplayers.sort(key=lambda x: x.score, reverse=True)
     if len(multiplayers) > 1:
-        calcWinner(players[0], players[1])
+        calcWinner(multiplayers[0], multiplayers[1])
     return render_template('winnermult.html', multiplayers=multiplayers, calcWinner=calcWinner, highscores=highscores)
 
 
