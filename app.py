@@ -194,15 +194,15 @@ def multiplayer(id, pNum, score, attempt):
                         multiplayers[pNum-1].incScore(1, plrAnswer)
                         print(multiplayers[pNum-1].name)
                         print(multiplayers[pNum-1].score)
-                        return redirect(url_for('winner', name=name, score=score))
+                        return redirect(url_for('winnermult'))
                 elif attempt == 2:
                     if plrAnswer != correctRes:
-                        return redirect(url_for('winner', name=name, score=score))
+                        return redirect(url_for('winnermult'))
                     else:
                         multiplayers[pNum-1].incScore(2, plrAnswer)
                         print(multiplayers[pNum-1].name)
                         print(multiplayers[pNum-1].score)
-                        return redirect(url_for('winner', name=name, score=score))
+                        return redirect(url_for('winnermult'))
             elif pNum == 3:
                 if attempt == 1:
                     if plrAnswer != correctRes:
@@ -254,37 +254,30 @@ def multiplayer(id, pNum, score, attempt):
 def winner(name, score):
     name = name
     score = score
-    # if len(players) == 1:
     with open('scores.txt', 'a') as w:
         name = name
         score = score
         w.write(f'{name}:{score}\n')
-        # if len(highscores) > 0:
-        #     addToHighscores()
-    # else:
-    #     # Sort players by score
-    #     players.sort(key=lambda x: x.score, reverse=True)
-    #     if len(players) > 1:
-    #         calcWinner(players[0], players[1])
-    return render_template('winner.html', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
+    return render_template('winner.html', calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
-@app.route("/winnermult/<string:name>/<int:score>", methods=['GET', 'POST'])
-def winnermult(name, score):
-    name = name
-    score = score
+
+@app.route("/winnermult", methods=['GET', 'POST'])
+def winnermult():
+    # name = name
+    # score = score
     # if len(players) == 1:
-    with open('scores.txt', 'a') as w:
-        name = name
-        score = score
-        w.write(f'{name}:{score}\n')
+    # with open('scores.txt', 'a') as w:
+    #     name = name
+    #     score = score
+    #     w.write(f'{name}:{score}\n')
         # if len(highscores) > 0:
         #     addToHighscores()
     # else:
-    #     # Sort players by score
-    #     players.sort(key=lambda x: x.score, reverse=True)
-    #     if len(players) > 1:
-    #         calcWinner(players[0], players[1])
-    return render_template('winnermult.html', players=players, calcWinner=calcWinner, highscores=highscores, name=name, score=score)
+    # Sort players by score
+    multiplayers.sort(key=lambda x: x.score, reverse=True)
+    if len(multiplayers) > 1:
+        calcWinner(players[0], players[1])
+    return render_template('winnermult.html', multiplayers=multiplayers, calcWinner=calcWinner, highscores=highscores)
 
 
 
