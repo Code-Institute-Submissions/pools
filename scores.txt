@@ -4,3 +4,4 @@ John:4
 Claire:2
 Lenny:3
 Jim:2
+nicky:6
