@@ -1,4 +1,4 @@
-import os, json
+import os, json, random
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import PlayerNumForm, NameForm, AnswerForm
 from game import Question, Player, calcWinner, createPlayerList, getPlayerName, getPlayerNameList
@@ -60,7 +60,7 @@ def getHighscores():
             highscores.append(player)
 
 
-# create fixtures for the game questions
+# create fixtures manually for the game questions
 def getFixtures():
     for game in games:
         home = game['teams'][0]
@@ -73,15 +73,35 @@ def getFixtures():
         results.append(res)
 
 
-def addToPlayersList(ply):
-    players.append(ply)
+# create fixtures from json stripped file
+def getjFixtures():
+    with open('2015_stripped.json') as f:
+        data = json.load(f)
+        # There are 38 fixture weeks in the season
+        randomWeek = random.randrange(37)
+        # Select random week from the json data
+        matchweek = data['rounds'][randomWeek]['matches']
+        for game in matchweek:
+            home = game['team1']['name']
+            away = game['team2']['name']
+            result = game['result']
+            question = Question(home, away, result)
+            fixture = question.fixture()
+            res = question.res()
+            fixList.append(fixture)
+            results.append(res)
+
+
+# def addToPlayersList(ply):
+#     players.append(ply)
 
 
 getHighscores()
 sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
 topTen = sortedHighscores[0:10]
 
-getFixtures()
+# getFixtures()
+getjFixtures()
 
 
 @app.route("/")
@@ -92,7 +112,7 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    resetGame()
+    # resetGame()
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
@@ -169,8 +189,7 @@ def game(id, name, score, attempt):
 
 
 multiplayers = createPlayerList()
-print(len(multiplayers))
-# pNames = multiplayers
+# print(len(multiplayers))
 
 
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
