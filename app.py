@@ -129,11 +129,11 @@ def enternames(id, numPlayers):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        # player = Player(name)
-        # addToPlayersList(player)
-        # with open('player_Names.txt', 'w') as w:
-        #     name = name
-        #     w.write(f'{name}\n')
+        player = Player(name)
+        addToPlayersList(player)
+        with open('player_Names.txt', 'w') as w:
+            name = name
+            w.write(f'{name}\n')
         flash(f'Good luck {name}!! ', 'dark')
         if numPlayers == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
