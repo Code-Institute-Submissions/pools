@@ -30,10 +30,6 @@ highscores = []
 sortedArray = []
 topTen = []
 
-# when new game is started the players list is cleared
-def resetGame():
-    del players[:]
-
 
 def resetHighscores():
     del highscores[:]
@@ -48,6 +44,7 @@ def addToHighscores():
         player['name'] = name
         player['score'] = score
         highscores.append(player)
+
 
 #function to extract scores from scores.txt and create dictionary of highscore player objects
 def getHighscores():
@@ -92,8 +89,8 @@ def getjFixtures():
             results.append(res)
 
 
-# def addToPlayersList(ply):
-#     players.append(ply)
+def addToPlayersList(ply):
+    players.append(ply)
 
 
 getHighscores()
@@ -101,7 +98,9 @@ sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=Tr
 topTen = sortedHighscores[0:10]
 
 # getFixtures()
-getjFixtures()
+
+multiplayers = createPlayerList()
+
 
 
 @app.route("/")
@@ -112,7 +111,7 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    # resetGame()
+    del fixList[:]
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
@@ -138,10 +137,8 @@ def enternames(id, numPlayers):
         elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
-            # names = getPlayerNameList()
-            # pName = names
-            # print(pName)
             return redirect(url_for('multiplayer', id=1, pNum=1, attempt=1))
+    getjFixtures()
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
 
 
@@ -179,7 +176,6 @@ def game(id, name, score, attempt):
                     return redirect(url_for('winner', name=name, score=score))
             if attempt == 2:
                 if plrAnswer != correctRes:
-                    flash(f'Wrong answer {name}', 'dark')
                     return redirect(url_for('winner', name=name, score=score))
                 else:
                     score = score +1
@@ -188,8 +184,6 @@ def game(id, name, score, attempt):
                                    id=id, players=players, fixList=fixList, results=results, name=name)
 
 
-multiplayers = createPlayerList()
-# print(len(multiplayers))
 
 
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
@@ -318,14 +312,6 @@ def rules():
 
 
 if __name__ == '__main__':
-    # app.jinja_env.auto_reload = True
-    # app.config['TEMPLATES_AUTO_RELOAD'] = True
-    # app.run(host='0.0.0.0', port=5000, debug=True)
-    # app.run(debug=True)
-    #app.run(debug=True, host='0.0.0.0')
-    # app.jinja_env.auto_reload = True
-    # app.config['TEMPLATES_AUTO_RELOAD'] = True
-    # app.run(debug=True)
     app.run(host = os.environ.get("IP"),
             port = int(os.environ.get("PORT", 5000)),
             debug = True)
