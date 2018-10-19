@@ -112,6 +112,7 @@ def home():
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
     del fixList[:]
+    del results[:]
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
