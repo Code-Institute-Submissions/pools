@@ -131,7 +131,7 @@ def enternames(id, numPlayers):
         name = form.playername.data
         player = Player(name)
         addToPlayersList(player)
-        with open('player_Names.txt', 'w') as w:
+        with open('player_Names.txt', 'a') as w:
             name = name
             w.write(f'{name}\n')
         flash(f'Good luck {name}!! ', 'dark')
@@ -154,7 +154,7 @@ def game(id, name, score, attempt):
         player = Player(name)
         plrAnswer = form.answer.data
         correctRes = results[id-1]
-        if id <= 2:
+        if id <= 9:
             if attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
@@ -169,11 +169,11 @@ def game(id, name, score, attempt):
                 else:
                     flash(f'You are correct {name}', 'success')
                     return redirect(url_for('game', id=id+1, name=name, score=score+1, attempt=1))
-        elif id == 3:
+        elif id == 10:
             if attempt == 1:
                 if plrAnswer != correctRes:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=3, name=name, score=score, attempt=2))
+                    return redirect(url_for('game', id=10, name=name, score=score, attempt=2))
                 else:
                     score = score + plrAnswer
                     return redirect(url_for('winner', name=name, score=score))
@@ -201,7 +201,7 @@ def multiplayer(id, pNum, attempt):
         id = id
         pNum = pNum
         # number of fixtures limit
-        fixtures = 3
+        fixtures = 10
         # do stuff only for count players
         if pNum <= count:
             # last player, last fixture, will be 10 in json
