@@ -113,6 +113,8 @@ def home():
 def newgame():
     del fixList[:]
     del results[:]
+    with open('player_Names.txt', 'r+') as f:
+        f.truncate(0)
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
@@ -134,7 +136,7 @@ def enternames(id, numPlayers):
         #     w.write(f'{name}\n')
         flash(f'Good luck {name}!! ', 'dark')
         if numPlayers == 1:
-            return redirect(url_for('game', id=1, pNum=1, name=name, score=0, attempt=1))
+            return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
         elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
