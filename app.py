@@ -148,6 +148,8 @@ def enternames(id, numPlayers):
 
 @app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, name, score, attempt):
+    print(f'Length of fixtures is {len(fixList)}')
+    print(f'Length of resilts is {len(results)}')
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
@@ -191,6 +193,8 @@ def game(id, name, score, attempt):
 
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, pNum, attempt):
+    print(f'Length of fixtures is {len(fixList)}')
+    print(f'Length of results is {len(results)}')
     form = AnswerForm()
     if form.validate_on_submit():
         plrAnswer = form.answer.data
