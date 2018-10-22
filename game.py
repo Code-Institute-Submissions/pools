@@ -100,18 +100,21 @@ class Open_File():
 
 
 # Function to open txt file containg names, make list of player objects
-def createPlayerList():
-    multiplayers = []
+def createPlayerList(array):
     with open ('player_Names.txt', 'r') as f:
         for name in f:
+            print(name)
             player = Player(name)
-            multiplayers.append(player)
-    return multiplayers
+            array.append(player)
+    print(array[0].name)
+    return array
+
 
 # Get Player Name
 def getPlayerName(list, num):
     name = list[num -1].name
     return name
+
 
 # Get Player Name List
 def getPlayerNameList():

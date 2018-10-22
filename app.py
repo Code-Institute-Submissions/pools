@@ -9,7 +9,7 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472'
 
 
 # player objects
-# players = []
+multiplayers = []
 fixList = []
 results = []
 # player scores dictionary
@@ -117,17 +117,17 @@ def enternames(id, numPlayers):
     if form.validate_on_submit():
         name = form.playername.data
         player = Player(name)
-        with open('player_Names.txt', 'a') as w:
+        with open('player_Names.txt', 'a') as f:
             name = name
-            w.write(f'{name}\n')
+            f.write(f'{name}\n')
         flash(f'Good luck {name}!! ', 'dark')
         if numPlayers == 1:
-            createPlayerList()
+            createPlayerList(multiplayers)
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
         elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
-            createPlayerList()
+            createPlayerList(multiplayers)
             return redirect(url_for('multiplayer', id=1, pNum=1, attempt=1))
     createFixtures(fixList, results)
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
