@@ -1,3 +1,5 @@
+import os, json, random
+
 season = [[
     {'game': 1,
      'teams':['West Ham', 'Everton'],
@@ -28,6 +30,20 @@ season = [[
     {'game': 3,
      'teams':['Alaves', 'Espanyol'],
      'result': 1}]]
+
+games = [
+    {"game": 1,
+    "teams": ["Man Utd", "Watford"],
+    "result": 1
+    },
+    {"game": 2,
+    "teams": ["Hudd", "Arsenal"],
+    "result": 2
+    },
+    {"game": 3,
+    "teams": ["Swansea", "Stoke"],
+    "result": 3}
+    ]
 
 # Question class used for creating a question instance containing 2 teams denoted as home and away
 # fixture method used for constructing the question
@@ -80,6 +96,7 @@ class Open_File():
 
     def __exit__(self, exc_type, exc_val, traceback):
         self.file.close()
+
 
 
 # Function to open txt file containg names, make list of player objects

@@ -7,22 +7,9 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'nusmmirhdl4472'
 
-games = [
-    {"game": 1,
-    "teams": ["Man Utd", "Watford"],
-    "result": 1
-    },
-    {"game": 2,
-    "teams": ["Hudd", "Arsenal"],
-    "result": 2
-    },
-    {"game": 3,
-    "teams": ["Swansea", "Stoke"],
-    "result": 3}
-    ]
 
 # player objects
-players = []
+# players = []
 fixList = []
 results = []
 # player scores dictionary
@@ -58,24 +45,24 @@ def getHighscores():
 
 
 # create fixtures manually for the game questions
-def getFixtures():
-    for game in games:
-        home = game['teams'][0]
-        away = game['teams'][1]
-        result = game['result']
-        question = Question(home, away, result)
-        fixture = question.fixture()
-        res = question.res()
-        fixList.append(fixture)
-        results.append(res)
+# def getFixtures():
+#     for game in games:
+#         home = game['teams'][0]
+#         away = game['teams'][1]
+#         result = game['result']
+#         question = Question(home, away, result)
+#         fixture = question.fixture()
+#         res = question.res()
+#         fixList.append(fixture)
+#         results.append(res)
 
 
 # create fixtures from json stripped file
-def getjFixtures():
+def createFixtures(fixtures, results):
     with open('2015_stripped.json') as f:
         data = json.load(f)
         # There are 38 fixture weeks in the season
-        randomWeek = random.randrange(37)
+        randomWeek = random.randrange(38)
         # Select random week from the json data
         matchweek = data['rounds'][randomWeek]['matches']
         for game in matchweek:
@@ -85,8 +72,9 @@ def getjFixtures():
             question = Question(home, away, result)
             fixture = question.fixture()
             res = question.res()
-            fixList.append(fixture)
+            fixtures.append(fixture)
             results.append(res)
+        return fixtures, results
 
 
 def addToPlayersList(ply):
@@ -99,22 +87,21 @@ topTen = sortedHighscores[0:10]
 
 # getFixtures()
 
-multiplayers = createPlayerList()
-
+# multiplayers = createPlayerList()
 
 
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', games=games)
+    return render_template('home.html')
 
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    del fixList[:]
-    del results[:]
-    with open('player_Names.txt', 'r+') as f:
-        f.truncate(0)
+    # del fixList[:]
+    # del results[:]
+    # with open('player_Names.txt', 'r+') as f:
+    #     f.truncate(0)
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = int(form.players.data)
@@ -130,26 +117,28 @@ def enternames(id, numPlayers):
     if form.validate_on_submit():
         name = form.playername.data
         player = Player(name)
-        addToPlayersList(player)
         with open('player_Names.txt', 'a') as w:
             name = name
             w.write(f'{name}\n')
         flash(f'Good luck {name}!! ', 'dark')
         if numPlayers == 1:
+            createPlayerList()
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
         elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
+            createPlayerList()
             return redirect(url_for('multiplayer', id=1, pNum=1, attempt=1))
-    getjFixtures()
+    createFixtures(fixList, results)
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
 
 
 
 @app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, name, score, attempt):
+    print(f'Length of multiplayers is {len(multiplayers)}')
     print(f'Length of fixtures is {len(fixList)}')
-    print(f'Length of resilts is {len(results)}')
+    print(f'Length of results is {len(results)}')
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
@@ -185,14 +174,15 @@ def game(id, name, score, attempt):
                 else:
                     score = score +1
                     return redirect(url_for('winner', name=name, score=score))
-    return render_template('game.html', form=form, games=games,
-                                   id=id, players=players, fixList=fixList, results=results, name=name)
+    return render_template('game.html', form=form,
+                                   id=id, fixList=fixList, results=results, name=name)
 
 
 
 
 @app.route("/multiplayer/<int:id>/<int:pNum>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, pNum, attempt):
+    print(f'Length of multiplayers is {len(multiplayers)}')
     print(f'Length of fixtures is {len(fixList)}')
     print(f'Length of results is {len(results)}')
     form = AnswerForm()
@@ -277,10 +267,10 @@ def multiplayer(id, pNum, attempt):
 def winner(name, score):
     name = name
     score = score
-    with open('scores.txt', 'a') as w:
+    with open('scores.txt', 'a') as f:
         name = name
         score = score
-        w.write(f'{name}:{score}\n')
+        f.write(f'{name}:{score}\n')
     return render_template('winner.html', calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
 
