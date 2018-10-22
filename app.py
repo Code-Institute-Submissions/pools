@@ -77,15 +77,15 @@ def createFixtures(fixtures, results):
         return fixtures, results
 
 
-def addToPlayersList(ply):
-    players.append(ply)
+# def addToPlayersList(ply):
+#     players.append(ply)
 
 
 getHighscores()
 sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
 topTen = sortedHighscores[0:10]
 
-# getFixtures()
+createFixtures(fixList, results)
 
 # multiplayers = createPlayerList()
 
@@ -122,14 +122,12 @@ def enternames(id, numPlayers):
             f.write(f'{name}\n')
         flash(f'Good luck {name}!! ', 'dark')
         if numPlayers == 1:
-            createPlayerList(multiplayers)
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
         elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
-            createPlayerList(multiplayers)
+            # createPlayerList(multiplayers)
             return redirect(url_for('multiplayer', id=1, pNum=1, attempt=1))
-    createFixtures(fixList, results)
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
 
 
@@ -142,7 +140,6 @@ def game(id, name, score, attempt):
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
-        player = Player(name)
         plrAnswer = form.answer.data
         correctRes = results[id-1]
         if id <= 9:
