@@ -22,6 +22,10 @@ def resetHighscores():
     del highscores[:]
 
 
+def initFixtures():
+    del fixList[:]
+
+
 #read last line of scores.txt and add to highscores array
 def addToHighscores():
     with open('scores.txt', 'r') as r:
@@ -268,6 +272,7 @@ def winner(name, score):
         name = name
         score = score
         f.write(f'{name}:{score}\n')
+    initFixtures()
     return render_template('winner.html', calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
 
