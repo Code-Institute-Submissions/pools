@@ -96,10 +96,12 @@ def initGame():
     week = getRandMatchWeek()
     fixtures = createFixtures(week)
     list = fixtures
+    print('initgame ran')
     return list
 
 
 fixList = initGame()
+print(fixList)
 multiplayers = createPlayerList()
 
 # def addToPlayersList(ply):
