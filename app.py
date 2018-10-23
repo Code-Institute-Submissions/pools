@@ -210,8 +210,8 @@ def multiplayer(id, pNum, attempt):
         name = getPlayerName(multiplayers, pNum)
         # count is the number of players
         count = len(multiplayers)
-        id = id
-        pNum = pNum
+        # id = id
+        # pNum = pNum
         currId = id
         correctRes = getCorrectResult(currId)
         fixtures = 10
