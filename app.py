@@ -102,6 +102,7 @@ def initGame():
     week = getRandMatchWeek()
     fixtures = createFixtures(week)
     list = fixtures
+    print('initGame executed')
     return list
 
 
@@ -147,7 +148,6 @@ def enternames(id, numPlayers):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        # player = Player(name)
         with open('player_Names.txt', 'a') as f:
             name = name
             f.write(f'{name}\n')
@@ -172,8 +172,8 @@ def game(id, name, score, attempt):
         name = name
         plrAnswer = form.answer.data
         # correctRes = results[id-1]
-        # id = id
-        correctRes = getCorrectResult(id)
+        currId = id
+        correctRes = getCorrectResult(currId)
         if id <= 9:
             if attempt == 1:
                 if plrAnswer != correctRes:
