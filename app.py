@@ -67,7 +67,7 @@ def getRandMatchWeek():
         # There are 38 fixture weeks in the season
         randomWeek = random.randrange(38)
         # Select random week from the json data
-        matchweek = data['rounds'][randomWeek]['matches']
+        matchweek = data['rounds'][0]['matches']
     return matchweek
 
 
