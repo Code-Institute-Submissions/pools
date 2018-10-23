@@ -104,11 +104,8 @@ def createPlayerList():
     with open ('player_Names.txt', 'r') as f:
         list = []
         for name in f:
-            print(name)
             player = Player(name)
             list.append(player)
-    # print(list[0].name)
-    print('createPlayerList has ran')
     return list
 
 

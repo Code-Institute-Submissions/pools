@@ -3,6 +3,7 @@ from flask import Flask, render_template, url_for, flash, redirect
 from forms import PlayerNumForm, NameForm, AnswerForm
 from game import Question, Player, calcWinner, createPlayerList, getPlayerName, getPlayerNameList
 
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'nusmmirhdl4472'
