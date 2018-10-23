@@ -10,7 +10,7 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472'
 
 # player objects
 multiplayers = []
-fixList = []
+# fixList = []
 results = []
 # player scores dictionary
 highscores = []
@@ -22,8 +22,9 @@ def resetHighscores():
     del highscores[:]
 
 
-def initFixtures():
-    del fixList[:]
+def initFixtures(f, r):
+    f = []
+    r = []
 
 
 #read last line of scores.txt and add to highscores array
@@ -61,25 +62,51 @@ def getHighscores():
 #         results.append(res)
 
 
-# create fixtures from json stripped file
-def createFixtures(fixtures, results):
+# get random matchweek object from json stripped file, contains 10 fixtures
+def getRandMatchWeek():
     with open('2015_stripped.json') as f:
         data = json.load(f)
         # There are 38 fixture weeks in the season
         randomWeek = random.randrange(38)
         # Select random week from the json data
         matchweek = data['rounds'][randomWeek]['matches']
-        for game in matchweek:
-            home = game['team1']['name']
-            away = game['team2']['name']
-            result = game['result']
-            question = Question(home, away, result)
-            fixture = question.fixture()
-            res = question.res()
-            fixtures.append(fixture)
-            results.append(res)
-        return fixtures, results
+    return matchweek
 
+
+# create fixtures from extracted matchweek
+def createFixtures(obj):
+    gList = []
+    for game in obj:
+        home = game['team1']['name']
+        away = game['team2']['name']
+        result = game['result']
+        question = Question(home, away, result)
+        fixture = question.fixture()
+        gameDict = {'fixture': fixture,
+                    'result': result}
+        gList.append(gameDict)
+        # res = question.res()
+        # fixtures.append(fixture)
+        # results.append(res)
+    return gList
+
+
+def getCorrectResult(num):
+    currentGame = num-1
+    result = fixList[currentGame]['result']
+    return result
+
+
+def initGame():
+    # initFixtures(fixList, results)
+    week = getRandMatchWeek()
+    fixtures = createFixtures(week)
+    list = fixtures
+    return list
+
+
+fixList = initGame()
+# print(fixList[0]['result'])
 
 # def addToPlayersList(ply):
 #     players.append(ply)
@@ -89,7 +116,7 @@ getHighscores()
 sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
 topTen = sortedHighscores[0:10]
 
-createFixtures(fixList, results)
+
 
 # multiplayers = createPlayerList()
 
@@ -120,7 +147,7 @@ def enternames(id, numPlayers):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        player = Player(name)
+        # player = Player(name)
         with open('player_Names.txt', 'a') as f:
             name = name
             f.write(f'{name}\n')
@@ -140,12 +167,13 @@ def enternames(id, numPlayers):
 def game(id, name, score, attempt):
     print(f'Length of multiplayers is {len(multiplayers)}')
     print(f'Length of fixtures is {len(fixList)}')
-    print(f'Length of results is {len(results)}')
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
         plrAnswer = form.answer.data
-        correctRes = results[id-1]
+        # correctRes = results[id-1]
+        # id = id
+        correctRes = getCorrectResult(id)
         if id <= 9:
             if attempt == 1:
                 if plrAnswer != correctRes:
@@ -176,7 +204,7 @@ def game(id, name, score, attempt):
                     score = score +1
                     return redirect(url_for('winner', name=name, score=score))
     return render_template('game.html', form=form,
-                                   id=id, fixList=fixList, results=results, name=name)
+                                   id=id, fixList=fixList, name=name)
 
 
 
@@ -185,7 +213,6 @@ def game(id, name, score, attempt):
 def multiplayer(id, pNum, attempt):
     print(f'Length of multiplayers is {len(multiplayers)}')
     print(f'Length of fixtures is {len(fixList)}')
-    print(f'Length of results is {len(results)}')
     form = AnswerForm()
     if form.validate_on_submit():
         plrAnswer = form.answer.data
@@ -272,7 +299,6 @@ def winner(name, score):
         name = name
         score = score
         f.write(f'{name}:{score}\n')
-    initFixtures()
     return render_template('winner.html', calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
 
