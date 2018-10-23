@@ -9,9 +9,7 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472'
 
 
 # player objects
-multiplayers = []
-# fixList = []
-results = []
+# multiplayers = []
 # player scores dictionary
 highscores = []
 sortedArray = []
@@ -22,9 +20,8 @@ def resetHighscores():
     del highscores[:]
 
 
-def initFixtures(f, r):
+def initFixtures(f):
     f = []
-    r = []
 
 
 #read last line of scores.txt and add to highscores array
@@ -85,9 +82,6 @@ def createFixtures(obj):
         gameDict = {'fixture': fixture,
                     'result': result}
         gList.append(gameDict)
-        # res = question.res()
-        # fixtures.append(fixture)
-        # results.append(res)
     return gList
 
 
@@ -98,16 +92,15 @@ def getCorrectResult(num):
 
 
 def initGame():
-    # initFixtures(fixList, results)
+    # initFixtures(fixList)
     week = getRandMatchWeek()
     fixtures = createFixtures(week)
     list = fixtures
-    print('initGame executed')
     return list
 
 
 fixList = initGame()
-# print(fixList[0]['result'])
+multiplayers = createPlayerList()
 
 # def addToPlayersList(ply):
 #     players.append(ply)
@@ -118,8 +111,7 @@ sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=Tr
 topTen = sortedHighscores[0:10]
 
 
-
-# multiplayers = createPlayerList()
+multiplayers = createPlayerList()
 
 
 @app.route("/")
@@ -157,7 +149,7 @@ def enternames(id, numPlayers):
         elif id < numPlayers:
             return redirect(url_for('enternames', id=id+1, numPlayers=numPlayers))
         elif id == numPlayers:
-            # createPlayerList(multiplayers)
+            # createPlayerList()
             return redirect(url_for('multiplayer', id=1, pNum=1, attempt=1))
     return render_template('enternames.html', form=form, id=id, numPlayers=numPlayers)
 
@@ -171,7 +163,6 @@ def game(id, name, score, attempt):
     if form.validate_on_submit():
         name = name
         plrAnswer = form.answer.data
-        # correctRes = results[id-1]
         currId = id
         correctRes = getCorrectResult(currId)
         if id <= 9:
@@ -216,13 +207,13 @@ def multiplayer(id, pNum, attempt):
     form = AnswerForm()
     if form.validate_on_submit():
         plrAnswer = form.answer.data
-        correctRes = results[id-1]
         name = getPlayerName(multiplayers, pNum)
         # count is the number of players
         count = len(multiplayers)
         id = id
         pNum = pNum
-        # number of fixtures limit
+        currId = id
+        correctRes = getCorrectResult(currId)
         fixtures = 10
         # do stuff only for count players
         if pNum <= count:
@@ -288,7 +279,7 @@ def multiplayer(id, pNum, attempt):
                     print(multiplayers[pNum-1].score)
                     return redirect(url_for('multiplayer', id=id, pNum=pNum+1, attempt=1))
     return render_template('multiplayer.html', form=form,
-                                   id=id, fixList=fixList, results=results, pNum=pNum, multiplayers=multiplayers)
+                                   id=id, fixList=fixList, pNum=pNum, multiplayers=multiplayers)
 
 
 @app.route("/winner/<string:name>/<int:score>", methods=['GET', 'POST'])
