@@ -92,12 +92,15 @@ def getCorrectResult(num):
 
 
 def initGame():
-    # initFixtures(fixList)
     week = getRandMatchWeek()
     fixtures = createFixtures(week)
     list = fixtures
     print('initgame ran')
     return list
+
+# week = getRandMatchWeek()
+# print(f'Random matchweek is {week}')
+
 
 
 fixList = initGame()
@@ -125,7 +128,6 @@ def home():
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
     # del fixList[:]
-    # del results[:]
     # with open('player_Names.txt', 'r+') as f:
     #     f.truncate(0)
     form = PlayerNumForm()
@@ -334,4 +336,4 @@ def rules():
 if __name__ == '__main__':
     app.run(host = os.environ.get("IP"),
             port = int(os.environ.get("PORT", 5000)),
-            debug = True)
+            debug = True, use_reloader=False)
