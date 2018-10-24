@@ -84,6 +84,8 @@ class Player:
     def getScore(self):
         return self.score
 
+
+
 # Open file class for set up and taerdown of files
 class Open_File():
     def __init__(self, filename, mode):
@@ -125,6 +127,7 @@ def getPlayerNameList():
         pName = names
         return pName
 
+
 # Function to convert guess input to string
 def ansConv(guess):
     if guess == 1:
@@ -134,6 +137,7 @@ def ansConv(guess):
     else:
         ansStr = 'Away Win'
     return ansStr
+
 
 def checkAnswer(plrAnswer, correctRes):
     if plrAnswer != correctRes:
@@ -145,6 +149,8 @@ def checkAnswer(plrAnswer, correctRes):
     if plrAnswer == correctRes:
         # flash(f'You are correct {name}', 'success')
         return redirect(url_for('game', id=id+1, name=name, score=score+1, attempt=1))
+
+
 
 # Function to calculate if there is a winner.  It only needs the top 2 sorted player objects.
 # If these 2 scores are equal then its a draw and any remaining players dont matter

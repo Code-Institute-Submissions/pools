@@ -27,9 +27,9 @@ def initFixtures(f):
 
 #read last line of scores.txt and add to highscores array
 def addToHighscores():
-    with open('scores.txt', 'r') as r:
+    with open('scores.txt', 'r') as f:
         player = {}
-        last_line = r.readlines()[-1]
+        last_line = f.readlines()[-1]
         name, score = last_line.split(':')
         player['name'] = name
         player['score'] = score
@@ -38,12 +38,12 @@ def addToHighscores():
 
 #function to extract scores from scores.txt and create dictionary of highscore player objects
 def getHighscores():
-    with open('scores.txt', 'r') as r:
-        for line in r:
+    with open('scores.txt', 'r') as f:
+        for line in f:
             player = {}
             name, score = line.split(':')
             player['name'] = name
-            player['score'] = score
+            player['score'] = int(score)
             highscores.append(player)
 
 
@@ -99,21 +99,16 @@ def initGame():
     print('initgame ran')
     return list
 
-# week = getRandMatchWeek()
-# print(f'Random matchweek is {week}')
-
 
 
 fixList = initGame()
 print(fixList)
 multiplayers = createPlayerList()
 
-# def addToPlayersList(ply):
-#     players.append(ply)
 
 
 getHighscores()
-sortedHighscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
+sortedHighscores = sorted(highscores, key=lambda item: int(item['score']), reverse=True)
 topTen = sortedHighscores[0:10]
 
 
@@ -215,8 +210,6 @@ def multiplayer(id, pNum, attempt):
         name = getPlayerName(multiplayers, pNum)
         # count is the number of players
         count = len(multiplayers)
-        # id = id
-        # pNum = pNum
         currId = id
         correctRes = getCorrectResult(currId)
         fixtures = 10
