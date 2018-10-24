@@ -124,8 +124,8 @@ def home():
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
     # del fixList[:]
-    # with open('player_Names.txt', 'r+') as f:
-    #     f.truncate(0)
+    with open('player_Names.txt', 'r+') as f:
+        f.truncate(0)
     form = PlayerNumForm()
     if form.validate_on_submit():
         numPlayers = int(form.players.data)

@@ -97,23 +97,25 @@ body {
   100% { border-bottom: 2px solid rgba(0, 0, 0, .5); }
 }
 
+/* winner page */
+
+.progress {
+  margin-bottom: 3rem;
+}
+
+
 .winner {
-  color: #b69a08;
-  text-decoration: underline #5b9dc2;
+  color: #7e787c;
+  display: inline-block;
+  margin-bottom: 1.5rem;
 }
 
 .result {
   font-size: 1.5rem;
-  font-weight: bold;
-  color: #5b9dc2;
+  color: #7e787c;
 }
 
-.winner-section {
-  /* background: url('../static/img/winner.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover; */
-}
+
 
 
 
