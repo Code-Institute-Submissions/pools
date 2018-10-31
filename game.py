@@ -1,50 +1,3 @@
-# import os, json, random
-
-season = [[
-    {'game': 1,
-     'teams':['West Ham', 'Everton'],
-     'result': 1},
-    {'game': 2,
-     'teams':['Spurs', 'Leicester'],
-     'result': 1},
-    {'game': 3,
-     'teams':['Swansea', 'Stoke'],
-     'result': 3}],
-[
-    {'game': 1,
-     'teams':['Man Utd', 'Man City'],
-     'result': 3},
-    {'game': 2,
-     'teams':['Liverpool', 'Brighton'],
-     'result': 2},
-    {'game': 3,
-     'teams':['Chelsea', 'Newcastle'],
-     'result': 1}],
-[
-    {'game': 1,
-     'teams':['Athletico', 'Barcelona'],
-     'result': 2},
-    {'game': 2,
-     'teams':['Getafe', 'Betis'],
-     'result': 2},
-    {'game': 3,
-     'teams':['Alaves', 'Espanyol'],
-     'result': 1}]]
-
-games = [
-    {"game": 1,
-    "teams": ["Man Utd", "Watford"],
-    "result": 1
-    },
-    {"game": 2,
-    "teams": ["Hudd", "Arsenal"],
-    "result": 2
-    },
-    {"game": 3,
-    "teams": ["Swansea", "Stoke"],
-    "result": 3}
-    ]
-
 # Question class used for creating a question instance containing 2 teams denoted as home and away
 # fixture method used for constructing the question
 class Question:
@@ -143,9 +96,6 @@ def checkAnswer(plrAnswer, correctRes):
     if plrAnswer != correctRes:
         flash(f'Wrong answer {name}, you have one more attempt', 'dark')
         return redirect(url_for('game', id=id, name=name, score=score, attempt=2))
-    # elif plrAnswer != correctRes & attempt == 2:
-    #     flash(f'Wrong answer {name}', 'dark')
-    #     return redirect(url_for('game', id=id+1, name=name, score=score, attempt=1))
     if plrAnswer == correctRes:
         # flash(f'You are correct {name}', 'success')
         return redirect(url_for('game', id=id+1, name=name, score=score+1, attempt=1))

@@ -1,7 +1,7 @@
 import os, json, random
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calcWinner, createPlayerList, getPlayerName, getPlayerNameList
+from game import Question, Player, calcWinner, createPlayerList, getPlayerName
 
 
 app = Flask(__name__)
@@ -47,18 +47,6 @@ def getHighscores():
             highscores.append(player)
 
 
-# create fixtures manually for the game questions
-# def getFixtures():
-#     for game in games:
-#         home = game['teams'][0]
-#         away = game['teams'][1]
-#         result = game['result']
-#         question = Question(home, away, result)
-#         fixture = question.fixture()
-#         res = question.res()
-#         fixList.append(fixture)
-#         results.append(res)
-
 
 # get random matchweek object from json stripped file, contains 10 fixtures
 def getRandMatchWeek():
@@ -100,11 +88,9 @@ def initGame():
     return list
 
 
-
 fixList = initGame()
 print(fixList)
 multiplayers = createPlayerList()
-
 
 
 getHighscores()
@@ -112,7 +98,7 @@ sortedHighscores = sorted(highscores, key=lambda item: int(item['score']), rever
 topTen = sortedHighscores[0:10]
 
 
-multiplayers = createPlayerList()
+# multiplayers = createPlayerList()
 
 
 @app.route("/")
@@ -123,7 +109,6 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    # del fixList[:]
     with open('player_Names.txt', 'r+') as f:
         f.truncate(0)
     form = PlayerNumForm()
@@ -282,6 +267,7 @@ def multiplayer(id, pNum, attempt):
                                    id=id, fixList=fixList, pNum=pNum, multiplayers=multiplayers)
 
 
+
 @app.route("/winner/<string:name>/<int:score>", methods=['GET', 'POST'])
 def winner(name, score):
     name = name
@@ -293,19 +279,9 @@ def winner(name, score):
     return render_template('winner.html', calcWinner=calcWinner, highscores=highscores, name=name, score=score)
 
 
+
 @app.route("/winnermult", methods=['GET', 'POST'])
 def winnermult():
-    # name = name
-    # score = score
-    # if len(players) == 1:
-    # with open('scores.txt', 'a') as w:
-    #     name = name
-    #     score = score
-    #     w.write(f'{name}:{score}\n')
-        # if len(highscores) > 0:
-        #     addToHighscores()
-    # else:
-    # Sort players by score
     multiplayers.sort(key=lambda x: x.score, reverse=True)
     if len(multiplayers) > 1:
         calcWinner(multiplayers[0], multiplayers[1])
