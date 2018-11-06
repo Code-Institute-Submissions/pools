@@ -14,16 +14,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 
-sorted_array = []
-top_ten = []
-fix_list = init_game()
-print(fix_list)
+# fix_list = init_game()
 multiplayers = create_player_list()
-
-
 highscores = get_highscores()
-sorted_highscores = sorted(highscores, key=lambda item: int(item['score']), reverse=True)
-top_ten = sorted_highscores[0:10]
 
 
 @app.route("/")
@@ -67,6 +60,7 @@ def enternames(id, num_players):
 
 @app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, name, score, attempt):
+    fix_list = init_game()
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
@@ -199,9 +193,8 @@ def winnermult():
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 def leaderboard():
-    # reset_highscores(highscores)
-    get_highscores()
-    sorted_highscores = sorted(highscores, key=lambda item: item['score'], reverse=True)
+    updated_highscores = get_highscores()
+    sorted_highscores = sorted(updated_highscores, key=lambda item: item['score'], reverse=True)
     top_ten = sorted_highscores[0:10]
     return render_template('leaderboard.html', title='leaderboard', highscores=highscores, sorted_highscores=sorted_highscores, top_ten=top_ten)
 
