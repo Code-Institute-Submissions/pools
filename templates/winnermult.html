@@ -10,7 +10,7 @@
         </div>
       {% endfor %}
       {% if multiplayers |length > 1 %}
-        <p class="result">Result: {{ calcWinner(multiplayers[0], multiplayers[1]) }}</p>
+        <p class="result">Result: {{ calc_winner(multiplayers[0], multiplayers[1]) }}</p>
       {% endif %}
       <p class="dark-green">Click on the button below to view high scores table.</p>
       <p class="">

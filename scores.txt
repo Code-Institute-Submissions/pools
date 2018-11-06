@@ -5,3 +5,5 @@ billy:8
 mike:4
 zag:7
 nicky:5
+Rusty:8
+Nickwick:14
