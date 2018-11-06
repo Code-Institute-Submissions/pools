@@ -139,7 +139,7 @@ def get_rand_match_week():
         """ Season is 38 weeks long """
         randomWeek = random.randrange(38)
         """ Select random week from the json """
-        matchweek = data['rounds'][0]['matches']
+        matchweek = data['rounds'][randomWeek]['matches']
     return matchweek
 
 
