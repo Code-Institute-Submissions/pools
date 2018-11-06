@@ -1,5 +1,5 @@
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session
@@ -9,8 +9,9 @@ from game import Question, Player, calc_winner, create_player_list, get_player_n
 
 app = Flask(__name__)
 
-load_dotenv()
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+# load_dotenv()
+# app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 
 sorted_array = []
