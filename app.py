@@ -1,21 +1,21 @@
 import os
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import json
 import random
-from flask import Flask, render_template, url_for, flash, redirect, session
+from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
 from forms import PlayerNumForm, NameForm, AnswerForm
 from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores
 
 
 app = Flask(__name__)
 
-# load_dotenv()
-# app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
+# SECRET_KEY = os.environ.get('SECRET_KEY')
 app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 
 fix_list = init_game()
-multiplayers = create_player_list()
+multiplayers = []
 highscores = get_highscores()
 
 
@@ -28,13 +28,15 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    with open('player_Names.txt', 'r+') as f:
-        f.truncate(0)
+    session.pop('player', None)
+    # session.pop('players', None)
     form = PlayerNumForm()
     if form.validate_on_submit():
         num_players = int(form.players.data)
         flash(f'{num_players} player game created!', 'dark')
         return redirect(url_for('enternames', id=1, num_players=num_players))
+    with open('player_Names.txt', 'r+') as f:
+        f.truncate(0)
     return render_template('newgame.html', title='newgame', form=form )
 
 
@@ -42,11 +44,14 @@ def newgame():
 @app.route("/enternames/<int:id>/<int:num_players>", methods=['GET', 'POST'])
 def enternames(id, num_players):
     form = NameForm()
+    # multiplayers = []
     if form.validate_on_submit():
         name = form.playername.data
-        with open('player_Names.txt', 'a') as f:
-            name = name
-            f.write(f'{name}\n')
+        # with open('player_Names.txt', 'a') as f:
+        #     name = name
+        #     f.write(f'{name}\n')
+        player = Player(name)
+        multiplayers.append(player)
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
@@ -63,6 +68,7 @@ def game(id, name, score, attempt):
     form = AnswerForm()
     if form.validate_on_submit():
         name = name
+        session['player'] = name
         plr_answer = form.answer.data
         currId = id
         correct_result = get_correct_result(currId, fix_list)
@@ -103,6 +109,7 @@ def game(id, name, score, attempt):
 
 @app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, p_num, attempt):
+    print(len(multiplayers))
     form = AnswerForm()
     if form.validate_on_submit():
         plr_answer = form.answer.data
