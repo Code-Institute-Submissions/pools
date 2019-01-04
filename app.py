@@ -113,6 +113,7 @@ def game(id, name, score, attempt):
 
 @app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, p_num, attempt):
+    print(multiplayers)
     form = AnswerForm()
     fix_list = init_game()
     if form.validate_on_submit():
