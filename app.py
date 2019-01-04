@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 
-fix_list = init_game()
+# fix_list = init_game()
 multiplayers = []
 highscores = get_highscores()
 
@@ -28,7 +28,6 @@ def home():
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
     session.pop('player', None)
-    # session.pop('players', None)
     form = PlayerNumForm()
     if form.validate_on_submit():
         num_players = int(form.players.data)
@@ -65,6 +64,7 @@ def enternames(id, num_players):
 @app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, name, score, attempt):
     form = AnswerForm()
+    fix_list = init_game()
     if form.validate_on_submit():
         name = name
         session['player'] = name

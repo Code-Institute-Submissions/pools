@@ -134,6 +134,7 @@ def get_rand_match_week():
     """
     get random matchweek object from json stripped file, contains 10 fixtures
     """
+    randomWeek = 0
     with open('38_week_season_results.json') as f:
         data = json.load(f)
         """ Season is 38 weeks long """
