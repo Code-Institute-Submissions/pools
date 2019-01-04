@@ -3,7 +3,7 @@ import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores
+from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, multi
 
 
 app = Flask(__name__)
@@ -48,7 +48,8 @@ def enternames(id, num_players):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        multiplayers[id-1].name = name
+        multi(multiplayers, id-1, name)
+        # multiplayers[id-1].name = name
         # with open('player_Names.txt', 'a') as f:
         #     name = name
         #     f.write(f'{name}\n')
@@ -111,8 +112,6 @@ def game(id, name, score, attempt):
 
 @app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, p_num, attempt):
-    print(player1.name)
-    print(player2.name)
     form = AnswerForm()
     fix_list = init_game()
     if form.validate_on_submit():

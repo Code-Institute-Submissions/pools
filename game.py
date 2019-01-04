@@ -168,6 +168,12 @@ def get_correct_result(num, list):
     return result
 
 
+def multi(list, id, name):
+    list[id].name = name
+    return list
+
+
+
 def init_game():
     week = get_rand_match_week()
     fixtures = create_fixtures(week)
