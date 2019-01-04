@@ -3,7 +3,7 @@ import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, multi
+from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, multiplayers
 
 
 app = Flask(__name__)
@@ -28,7 +28,7 @@ def home():
     return render_template('home.html')
 
 
-multiplayers = []
+
 
 
 @app.route("/newgame", methods=['GET', 'POST'])
