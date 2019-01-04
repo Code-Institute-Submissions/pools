@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 
 # fix_list = init_game()
-multiplayers = []
+# multiplayers = []
 highscores = get_highscores()
 
 
@@ -49,7 +49,7 @@ def enternames(id, num_players):
         #     name = name
         #     f.write(f'{name}\n')
         player = Player(name)
-        multiplayers.append(player)
+        # multiplayers.append(player)
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
@@ -108,7 +108,13 @@ def game(id, name, score, attempt):
 
 @app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, p_num, attempt):
+    multiplayers = []
     print(len(multiplayers))
+    player1 = Player()
+    player2 = Player()
+    multiplayers.append(player1)
+    multiplayers.append(player2)
+    fix_list = init_game()
     form = AnswerForm()
     if form.validate_on_submit():
         plr_answer = form.answer.data
