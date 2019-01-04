@@ -84,7 +84,7 @@ def create_player_list():
 
 
 def get_player_name(list, num):
-    name = list[num -1].name
+    name = list[num].name
     return name
 
 
@@ -171,7 +171,7 @@ def get_correct_result(num, list):
 def multi(list, id, name):
     list[id].name = name
     print('multi ran')
-    return list[id]
+    return list
 
     # return list
 

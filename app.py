@@ -15,8 +15,8 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 # fix_list = init_game()
 
-player1 = Player()
-player2 = Player()
+player1 = Player(name='Pen')
+player2 = Player(name='Teller')
 multiplayers = [player1, player2]
 highscores = get_highscores()
 
@@ -48,12 +48,7 @@ def enternames(id, num_players):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        multi(multiplayers, id-1, name)
-        # multiplayers[id-1].name = name
-        # with open('player_Names.txt', 'a') as f:
-        #     name = name
-        #     f.write(f'{name}\n')
-        # player = Player(name)
+        # multi(multiplayers, id-1, name)
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
@@ -118,7 +113,7 @@ def multiplayer(id, p_num, attempt):
     print(player2.name)
     if form.validate_on_submit():
         plr_answer = form.answer.data
-        name = get_player_name(multiplayers, p_num)
+        name = get_player_name(multiplayers, p_num-1)
         count = len(multiplayers)
         currId = id
         correct_result = get_correct_result(currId, fix_list)
