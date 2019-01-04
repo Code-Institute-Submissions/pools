@@ -114,8 +114,8 @@ def game(id, name, score, attempt):
 def multiplayer(id, p_num, attempt):
     form = AnswerForm()
     fix_list = init_game()
-    print(playe1.name)
-    print(playe2.name)
+    print(player1.name)
+    print(player2.name)
     if form.validate_on_submit():
         plr_answer = form.answer.data
         name = get_player_name(multiplayers, p_num)
