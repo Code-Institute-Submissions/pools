@@ -141,7 +141,7 @@ def get_rand_match_week():
         randomWeek = random.randrange(38)
         print(f'random week = {randomWeek}')
         """ Select random week from the json """
-        matchweek = data['rounds'][randomWeek]['matches']
+        matchweek = data['rounds'][16]['matches']
 
     return matchweek
 
