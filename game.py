@@ -170,7 +170,13 @@ def get_correct_result(num, list):
 
 def multi(list, id, name):
     list[id].name = name
-    return list
+    print('multi ran')
+    return list[id]
+
+    # return list
+
+
+# def get_multi():
 
 
 
