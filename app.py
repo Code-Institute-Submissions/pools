@@ -120,7 +120,8 @@ def multiplayer(id, p_num, attempt):
         plr_answer = form.answer.data
         # name = get_player_name(multiplayers, int(p_num)-1)
         name = multiplayers[int(p_num) -1].get_name()
-        count = len(multiplayers)
+        # count = len(multiplayers)
+        count = 2
         currId = id
         correct_result = get_correct_result(currId, fix_list)
         fixtures = 10
