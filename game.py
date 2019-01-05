@@ -3,14 +3,10 @@ import json
 import random
 
 
-# class Multiplayer:
-#     def __init__(self, playerlist):
-#
-#         self.playerlist = playerlist
 
-
-multiplayers = []
+# multiplayers = []
 names = []
+
 
 
 

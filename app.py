@@ -3,7 +3,7 @@ import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, multiplayers, names
+from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, names
 
 
 app = Flask(__name__)
@@ -15,9 +15,9 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 # fix_list = init_game()
 
-# player1 = Player(name='Pen')
-# player2 = Player(name='Teller')
-# multiplayers = [player1, player2]
+player1 = Player()
+player2 = Player()
+multiplayers = [player1, player2]
 highscores = get_highscores()
 
 
@@ -51,8 +51,7 @@ def enternames(id, num_players):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        player = Player(name=name)
-        multiplayers.append(player)
+        multiplayers[id -1].name = name
         names.append(name)
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
@@ -60,10 +59,10 @@ def enternames(id, num_players):
         elif id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
-            name = form.playername.data
-            player = Player(name=name)
-            multiplayers.append(player)
-            names.append(name)
+            # name = form.playername.data
+            # player = Player(name=name)
+            # multiplayers.append(player)
+            # names.append(name)
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
     return render_template('enternames.html', form=form, id=id, num_players=num_players)
 
@@ -125,8 +124,8 @@ def multiplayer(id, p_num, attempt):
         plr_answer = form.answer.data
         # name = get_player_name(multiplayers, int(p_num)-1)
         # name = multiplayers[int(p_num) -1].get_name()
-        name = 'Jimbo'
-        count = len(multiplayers)
+        name = names[p_num -1]
+        count = len(names)
         currId = id
         correct_result = get_correct_result(currId, fix_list)
         fixtures = 10
