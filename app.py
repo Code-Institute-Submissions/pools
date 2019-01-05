@@ -17,7 +17,8 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 player1 = Player()
 player2 = Player()
-multiplayers = [player1, player2]
+player3 = Player()
+multiplayers = [player1, player2, player3]
 highscores = get_highscores()
 
 
@@ -50,8 +51,8 @@ def newgame():
 def enternames(id, num_players):
     form = NameForm()
     name = form.playername.data
+    multiplayers[id -1].name = name
     names.append(name)
-    multiplayers[id -1].name = name    
     if form.validate_on_submit():
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
