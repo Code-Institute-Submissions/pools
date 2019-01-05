@@ -60,6 +60,7 @@ def enternames(id, num_players):
         elif id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
+            name = form.playername.data
             player = Player(name=name)
             multiplayers.append(player)
             names.append(name)
