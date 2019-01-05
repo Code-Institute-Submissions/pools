@@ -49,6 +49,7 @@ def newgame():
 
 @app.route("/enternames/<int:id>/<int:num_players>", methods=['GET', 'POST'])
 def enternames(id, num_players):
+    form = NameForm()
     if form.validate_on_submit():
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
@@ -56,8 +57,7 @@ def enternames(id, num_players):
         elif id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
-            return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
-        form = NameForm()
+            return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))        
         name = form.playername.data
         names.append(name)
         multiplayers[int(id)-1].name = name
