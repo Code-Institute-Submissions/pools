@@ -119,7 +119,7 @@ def multiplayer(id, p_num, attempt):
     if form.validate_on_submit():
         plr_answer = form.answer.data
         # name = get_player_name(multiplayers, int(p_num)-1)
-        name = multiplayers[int(p_num) -1]
+        name = multiplayers[int(p_num) -1].name
         count = len(multiplayers)
         currId = id
         correct_result = get_correct_result(currId, fix_list)
