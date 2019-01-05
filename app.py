@@ -50,12 +50,9 @@ def newgame():
 def enternames(id, num_players):
     form = NameForm()
     name = form.playername.data
-    multiplayers[id -1].name = name
     names.append(name)
+    multiplayers[id -1].name = name    
     if form.validate_on_submit():
-        # name = form.playername.data
-        # multiplayers[id -1].name = name
-        # names.append(name)
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
