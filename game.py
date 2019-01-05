@@ -10,6 +10,7 @@ import random
 
 
 multiplayers = []
+names = []
 
 
 

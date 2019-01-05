@@ -3,7 +3,7 @@ import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, multiplayers
+from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, multiplayers, names
 
 
 app = Flask(__name__)
@@ -53,14 +53,16 @@ def enternames(id, num_players):
         name = form.playername.data
         player = Player(name=name)
         multiplayers.append(player)
+        names.append(name)
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
-        elif id < num_players:            
+        elif id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
             player = Player(name=name)
             multiplayers.append(player)
+            names.append(name)
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
     return render_template('enternames.html', form=form, id=id, num_players=num_players)
 
@@ -180,7 +182,7 @@ def multiplayer(id, p_num, attempt):
                         multiplayers[p_num-1].inc_score(2, plr_answer)
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1))
     return render_template('multiplayer.html', form=form,
-                                   id=id, fix_list=fix_list, p_num=p_num, multiplayers=multiplayers)
+                                   id=id, fix_list=fix_list, p_num=p_num, multiplayers=multiplayers, names=names)
 
 
 
