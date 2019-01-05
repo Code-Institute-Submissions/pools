@@ -65,6 +65,7 @@ def enternames(id, num_players):
 
 
 
+
 @app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>", methods=['GET', 'POST'])
 def game(id, name, score, attempt):
     form = AnswerForm()
@@ -117,7 +118,8 @@ def multiplayer(id, p_num, attempt):
     fix_list = init_game()
     if form.validate_on_submit():
         plr_answer = form.answer.data
-        name = get_player_name(multiplayers, int(p_num)-1)
+        # name = get_player_name(multiplayers, int(p_num)-1)
+        name = multiplayers[int(p_num) -1]
         count = len(multiplayers)
         currId = id
         correct_result = get_correct_result(currId, fix_list)
