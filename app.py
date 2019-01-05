@@ -116,7 +116,6 @@ def multiplayer(id, p_num, attempt):
     print(multiplayers)
     form = AnswerForm()
     fix_list = init_game()
-    multiplayer = multiplayers
     if form.validate_on_submit():
         plr_answer = form.answer.data
         name = get_player_name(multiplayers, p_num-1)
@@ -178,7 +177,7 @@ def multiplayer(id, p_num, attempt):
                         multiplayers[p_num-1].inc_score(2, plr_answer)
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1))
     return render_template('multiplayer.html', form=form,
-                                   id=id, fix_list=fix_list, p_num=p_num, names=multiplayers)
+                                   id=id, fix_list=fix_list, p_num=p_num, multiplayers=multiplayers)
 
 
 
