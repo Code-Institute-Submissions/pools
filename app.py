@@ -17,8 +17,7 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 
 player1 = Player()
 player2 = Player()
-player3 = Player()
-multiplayers = [player1, player2, player3]
+multiplayers = [player1, player2]
 highscores = get_highscores()
 
 
@@ -50,17 +49,17 @@ def newgame():
 @app.route("/enternames/<int:id>/<int:num_players>", methods=['GET', 'POST'])
 def enternames(id, num_players):
     form = NameForm()
-    if form.validate_on_submit():        
+    if form.validate_on_submit():
+        name = form.playername.data
+        names.append(name)
+        multiplayers[int(id)-1].name = name
+        flash(f'Good luck {name}!! ', 'dark')        
         if num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
         elif id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
-        name = form.playername.data
-        flash(f'Good luck {name}!! ', 'dark')
-        names.append(name)
-        multiplayers[int(id)-1].name = name
     return render_template('enternames.html', form=form, id=id, num_players=num_players)
 
 
