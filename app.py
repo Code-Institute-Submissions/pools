@@ -60,13 +60,13 @@ def enternames(id, num_players):
         flash(f'Good luck {name}!! ', 'dark')
         if id < num_players:
             names.append(name)
-            multiplayers[0].name = name
+            multiplayers[0].set_name(name)
             print('Names after first name entry..')
             print(names)
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
             names.append(name)
-            multiplayers[1].name = name
+            multiplayers[1].set_name(name)
             print('Names after second name entry..')
             print(names)
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
@@ -125,8 +125,8 @@ def game(id, name, score, attempt):
 @app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, p_num, attempt):
     print(multiplayers)
-    print(multiplayers[0].name)
-    print(multiplayers[1].name)
+    print(multiplayers[0].get_name()
+    print(multiplayers[1].get_name()
     form = AnswerForm()
     fix_list = init_game()
     if form.validate_on_submit():
