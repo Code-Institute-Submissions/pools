@@ -49,7 +49,6 @@ def newgame():
 @app.route("/enternames/<int:id>/<int:num_players>", methods=['GET', 'POST'])
 def enternames(id, num_players):
     form = NameForm()
-    names = names
     if form.validate_on_submit():
         name = form.playername.data
         names.append(name)
