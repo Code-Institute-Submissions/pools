@@ -2,7 +2,7 @@ import os
 import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from forms import PlayerNumForm, NameForm, AnswerForm
 from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, names
 
@@ -12,9 +12,9 @@ app = Flask(__name__)
 
 
 app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+#
+# db = SQLAlchemy(app)
 
 
 # fix_list = init_game()
