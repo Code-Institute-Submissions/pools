@@ -106,8 +106,9 @@ def calc_winner(playerA, playerB):
     If these 2 scores are equal then its a draw and any remaining players dont matter
     """
     if playerA.score > playerB.score:
-        # return(f'{playerA.name} is the winner!')
-        return(f'{playerA.get_name()} is the winner!')
+        return(f'{playerA.name} is the winner!')
+    elif playerB.score > playerA.score:
+        return(f'{playerB.name} is the winner!')
     else:
         return('Game has finished in a draw!')
 
