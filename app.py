@@ -133,7 +133,7 @@ def multiplayer(id, p_num, attempt):
         plr_answer = form.answer.data
         # name = get_player_name(multiplayers, int(p_num)-1)
         # name = multiplayers[int(p_num) -1].get_name()
-        name = names[p_num -1]
+        name = multiplayers[p_num -1].get_name()
         count = 2
         currId = id
         correct_result = get_correct_result(currId, fix_list)

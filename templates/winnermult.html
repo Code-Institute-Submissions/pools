@@ -4,7 +4,7 @@
     <section class="winner-section">
       <h2 class="winner">Result</h2>
       {% for player in range(multiplayers |length) %}
-        <p class="result">{{ names[player] }} you scored {{ multiplayers[player].score }} points!</p>
+        <p class="result">{{ multiplayers[player].name }} you scored {{ multiplayers[player].score }} points!</p>
         <div class="progress">
           <div class="progress-bar bg-success" role="progressbar" style="width: {{ multiplayers[player].score * 5 }}%" aria-valuenow="{{ multiplayers[player].score }}" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
