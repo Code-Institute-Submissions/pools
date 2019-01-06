@@ -51,8 +51,8 @@ def enternames(id, num_players):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        names.append(name)
-        multiplayers[int(id)-1].name = name
+        # names.append(name)
+        # multiplayers[int(id)-1].name = name
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
@@ -61,6 +61,8 @@ def enternames(id, num_players):
             multiplayers[int(id)-1].name = name
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
+            names.append(name)
+            multiplayers[int(id)-1].name = name
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
     return render_template('enternames.html', form=form, id=id, num_players=num_players)
 
