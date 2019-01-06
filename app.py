@@ -51,7 +51,7 @@ def enternames(id, num_players):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        # names.append(name)
+        names.append(name)
         # multiplayers[int(id)-1].name = name
         flash(f'Good luck {name}!! ', 'dark')
         if id < num_players:
