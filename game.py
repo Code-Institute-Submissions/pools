@@ -5,7 +5,7 @@ import random
 
 
 # multiplayers = []
-names = []
+names = ['Lon', 'Norman']
 
 
 

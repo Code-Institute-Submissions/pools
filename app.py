@@ -2,6 +2,7 @@ import os
 import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
+from flask_sqlalchemy import SQLAlchemy
 from forms import PlayerNumForm, NameForm, AnswerForm
 from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, names
 
@@ -9,8 +10,11 @@ from game import Question, Player, calc_winner, create_player_list, get_player_n
 app = Flask(__name__)
 
 
-# SECRET_KEY = os.environ.get('SECRET_KEY')
+
 app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+db = SQLAlchemy(app)
 
 
 # fix_list = init_game()
@@ -18,8 +22,8 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 player1 = Player()
 player2 = Player()
 multiplayers = [player1, player2]
-dudes = []
 highscores = get_highscores()
+
 
 
 
@@ -63,8 +67,6 @@ def enternames(id, num_players):
             names.append(name)
             print('Names after second name entry..')
             print(names)
-            dudes = names
-            # multiplayers[int(id)-1].name = name
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
         elif num_players == 1:
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1))
@@ -121,8 +123,6 @@ def game(id, name, score, attempt):
 @app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, p_num, attempt):
     print(multiplayers)
-    print('Dudes at multi..')
-    print(dudes)
     form = AnswerForm()
     fix_list = init_game()
     if form.validate_on_submit():
