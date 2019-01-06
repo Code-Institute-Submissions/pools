@@ -18,6 +18,7 @@ app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
 player1 = Player()
 player2 = Player()
 multiplayers = [player1, player2]
+dudes = []
 highscores = get_highscores()
 
 
@@ -51,7 +52,6 @@ def enternames(id, num_players):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        # names.append(name)
         # multiplayers[int(id)-1].name = name
         flash(f'Good luck {name}!! ', 'dark')
         if id < num_players:
@@ -63,6 +63,7 @@ def enternames(id, num_players):
             names.append(name)
             print('Names after second name entry..')
             print(names)
+            dudes = names
             # multiplayers[int(id)-1].name = name
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1))
         elif num_players == 1:
@@ -120,8 +121,8 @@ def game(id, name, score, attempt):
 @app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>", methods=['GET', 'POST'])
 def multiplayer(id, p_num, attempt):
     print(multiplayers)
-    print('Names at multi..')
-    print(names)
+    print('Dudes at multi..')
+    print(dudes)
     form = AnswerForm()
     fix_list = init_game()
     if form.validate_on_submit():
