@@ -56,7 +56,6 @@ class Player:
     def set_name(self, nm):
         self.name = nm
 
-
     def get_name(self):
         return self.name
 
@@ -107,7 +106,8 @@ def calc_winner(playerA, playerB):
     If these 2 scores are equal then its a draw and any remaining players dont matter
     """
     if playerA.score > playerB.score:
-        return(f'{playerA.name} is the winner!')
+        # return(f'{playerA.name} is the winner!')
+        return(f'{playerA.get_name()} is the winner!')
     else:
         return('Game has finished in a draw!')
 
