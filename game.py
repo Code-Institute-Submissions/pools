@@ -4,12 +4,6 @@ import random
 
 
 
-# multiplayers = []
-names = ['Lon', 'Norman']
-
-
-
-
 class Question:
     def __init__(self, home, away, result):
         """
@@ -185,11 +179,6 @@ def multi(list, id, name):
     list[id].name = name
     print('multi ran')
     return list
-
-    # return list
-
-
-# def get_multi():
 
 
 

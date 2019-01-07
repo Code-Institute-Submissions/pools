@@ -2,25 +2,19 @@ import os
 import json
 import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
-# from flask_sqlalchemy import SQLAlchemy
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, names
+from game import Question, Player, calc_winner, create_player_list, get_player_name, add_to_highscores, get_highscores, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores
 
 
 app = Flask(__name__)
 
 
-
 app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-#
-# db = SQLAlchemy(app)
 
-
-# fix_list = init_game()
 
 player1 = Player()
 player2 = Player()
+names = ['a', 'b']
 multiplayers = [player1, player2]
 highscores = get_highscores()
 
@@ -56,7 +50,6 @@ def enternames(id, num_players):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
-        # multiplayers[int(id)-1].name = name
         flash(f'Good luck {name}!! ', 'dark')
         if id < num_players:
             names.append(name)
@@ -131,9 +124,7 @@ def multiplayer(id, p_num, attempt):
     fix_list = init_game()
     if form.validate_on_submit():
         plr_answer = form.answer.data
-        # name = get_player_name(multiplayers, int(p_num)-1)
-        # name = multiplayers[int(p_num) -1].get_name()
-        name = multiplayers[p_num -1].get_name()
+        name = multiplayers[int(p_num) -1].get_name()
         count = 2
         currId = id
         correct_result = get_correct_result(currId, fix_list)
@@ -177,17 +168,21 @@ def multiplayer(id, p_num, attempt):
             elif p_num < count:
                 if attempt == 1:
                     if plr_answer != correct_result:
+                        print(p_num)
                         flash(f'Wrong answer {name}, you have one more attempt', 'dark')
                         return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2))
                     else:
+                        print(p_num)
                         flash(f'You are correct {name}', 'success')
                         multiplayers[p_num-1].inc_score(1, plr_answer)
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1))
                 elif attempt == 2:
+                    print(p_num)
                     if plr_answer != correct_result:
                         flash(f'Wrong answer {name}', 'dark')
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1))
                     else:
+                        print(p_num)
                         flash(f'You are correct {name}', 'success')
                         multiplayers[p_num-1].inc_score(2, plr_answer)
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1))
