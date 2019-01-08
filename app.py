@@ -11,6 +11,8 @@ app = Flask(__name__)
 
 
 app.config['SECRET_KEY'] = 'nusmmirhdl4472hfjhfxszlonn52t'
+app.config['MONGO_DBNAME'] = 'scores_game'
+app.config['MONGO_URI'] = 'mongodb://roykeane:roykeane16@ds251284.mlab.com:51284/scores_game'
 
 mongo = PyMongo(app)
 
