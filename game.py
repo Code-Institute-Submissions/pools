@@ -4,6 +4,7 @@ import random
 
 
 
+
 class Question:
     def __init__(self, home, away, result):
         """
@@ -137,7 +138,27 @@ def get_highscores():
 
 
 
-def get_rand_match_week():
+def get_scores(store):
+    """
+    function to extract scores from scores.txt and
+    create dictionary of highscore player objects
+    """
+    scores = []
+    scores_table = store.db.scores_table
+    all_scores = scores_table.find()
+    for record in all_scores:
+        player = {}
+        # name, score = line.split(':')
+        name = record['name']
+        score = record['score']
+        player['name'] = name
+        player['score'] = int(score)
+        scores.append(player)
+    return scores
+
+
+
+def get_rand_match_week(num):
     """
     get random matchweek object from json stripped file, contains 10 fixtures
     """
@@ -147,7 +168,7 @@ def get_rand_match_week():
         """ Season is 38 weeks long """
         randomWeek = random.randrange(38)
         """ Select random week from the json """
-        matchweek = data['rounds'][16]['matches']
+        matchweek = data['rounds'][num]['matches']
 
     return matchweek
 
@@ -182,8 +203,8 @@ def multi(list, id, name):
 
 
 
-def init_game():
-    week = get_rand_match_week()
+def init_game(num):
+    week = get_rand_match_week(num)
     fixtures = create_fixtures(week)
     list = fixtures
     print('init game ran')

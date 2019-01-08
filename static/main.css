@@ -53,6 +53,12 @@ body {
   margin: 1.5rem 0rem 1.5rem;
 }
 
+.week {
+  font-size: 1.2rem;
+  margin-left: 1rem;
+  color: #08b7ee;
+}
+
 .player {
   margin-bottom: 2rem;
 }
