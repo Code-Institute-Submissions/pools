@@ -7,8 +7,7 @@
             <!-- <legend class="margin-bottom mb-4">Enter your prediction below.</legend> -->
                 <h3>Fixture: {{ id }} of 10 <span class="punderline week">Week {{ week }}</span></h3>
                 <h2 class="fixture">{{ fix_list[id-1]['fixture'] }}</h2>
-                <h4 class="player">Player: <span class="punderline">{{ multiplayers[p_num-1].get_name() }}</span></h4>
-                <!-- <h4 class="player">Player: <span class="punderline">{{ multiplayers[p_num-1].get_name() }}</span></h4> -->
+                <h4 class="player">Player: <span class="punderline">{{ name }}</span></h4>
             <div class="form-group">
               {{ form.answer.label(class="form-control-label") }}
               {% if form.answer.errors %}
