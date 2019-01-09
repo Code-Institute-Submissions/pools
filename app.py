@@ -79,7 +79,6 @@ def enternames(id, num_players):
             print('Names after second name entry..')
             print(names)
             return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1, week=rand_week))
-
     return render_template('enternames.html', form=form, id=id, num_players=num_players)
 
 
@@ -135,13 +134,16 @@ def multiplayer(id, p_num, attempt, week):
     print(multiplayers)
     print(multiplayers[0].get_name())
     print(multiplayers[1].get_name())
+    name1 = multiplayers[0].get_name()
+    name2 = multiplayers[1].get_name()
+    names = [name1, name2]
     form = AnswerForm()
     fix_list = init_game(week)
-    name = multiplayers[int(p_num) -1].get_name()
+    # name = multiplayers[int(p_num) -1].get_name()
     if form.validate_on_submit():
         plr_answer = form.answer.data
         # name = multiplayers[int(p_num) -1].get_name()
-        print(name)
+        # print(name)
         count = 2
         currId = id
         correct_result = get_correct_result(currId, fix_list)
@@ -152,7 +154,7 @@ def multiplayer(id, p_num, attempt, week):
             if id == fixtures and p_num == count:
                 if attempt == 1:
                     if plr_answer != correct_result:
-                        flash(f'Wrong answer {name}, you have one more attempt', 'dark')
+                        flash(f'Wrong answer {names[p_num-1]}, you have one more attempt', 'dark')
                         return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week))
                     else:
                         multiplayers[p_num-1].inc_score(1, plr_answer)
@@ -167,18 +169,18 @@ def multiplayer(id, p_num, attempt, week):
             elif p_num == count:
                 if attempt == 1:
                     if plr_answer != correct_result:
-                        flash(f'Wrong answer {name}, you have one more attempt', 'dark')
+                        flash(f'Wrong answer {names[p_num-1]}, you have one more attempt', 'dark')
                         return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week))
                     else:
-                        flash(f'You are correct {name}', 'success')
+                        flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(1, plr_answer)
                         return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week))
                 elif attempt == 2:
                     if plr_answer != correct_result:
-                        flash(f'Wrong answer {name}', 'dark')
+                        flash(f'Wrong answer {names[p_num-1]}', 'dark')
                         return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week))
                     else:
-                        flash(f'You are correct {name}', 'success')
+                        flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(2, plr_answer)
                         return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week))
             # fixture 1 to 9 all players excluding last player
@@ -186,25 +188,25 @@ def multiplayer(id, p_num, attempt, week):
                 if attempt == 1:
                     if plr_answer != correct_result:
                         print(p_num)
-                        flash(f'Wrong answer {name}, you have one more attempt', 'dark')
+                        flash(f'Wrong answer {names[p_num-1]}, you have one more attempt', 'dark')
                         return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week))
                     else:
                         print(p_num)
-                        flash(f'You are correct {name}', 'success')
+                        flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(1, plr_answer)
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week))
                 elif attempt == 2:
                     print(p_num)
                     if plr_answer != correct_result:
-                        flash(f'Wrong answer {name}', 'dark')
+                        flash(f'Wrong answer {names[p_num-1]}', 'dark')
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week))
                     else:
                         print(p_num)
-                        flash(f'You are correct {name}', 'success')
+                        flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(2, plr_answer)
                         return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week))
     return render_template('multiplayer.html', form=form,
-                                   id=id, fix_list=fix_list, p_num=p_num, multiplayers=multiplayers, names=names, week=week, name=name)
+                                   id=id, fix_list=fix_list, p_num=p_num, multiplayers=multiplayers, names=names, week=week)
 
 
 
