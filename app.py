@@ -19,7 +19,7 @@ mongo = PyMongo(app)
 
 player1 = Player()
 player2 = Player()
-names = ['a', 'b']
+names = ['Kim', 'Kate']
 multiplayers = [player1, player2]
 # highscores = get_highscores()
 highscores = get_scores(mongo)
@@ -50,7 +50,6 @@ def newgame():
 
 
 
-
 @app.route("/enternames/<int:id>/<int:num_players>", methods=['GET', 'POST'])
 def enternames(id, num_players):
     form = NameForm()
@@ -61,19 +60,19 @@ def enternames(id, num_players):
             rand_week = random.randrange(38)
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1, week=rand_week))
         if id < num_players:
-            names.append(name)
-            player1 = mongo.db.players
-            player1.insert({'name': name,
-                            'score': 0})
+            # names.append(name)
+            # game = mongo.db.game
+            # player1 = mongo.db.players
+            # player1.insert({'name': name,
+            #                 'score': 0})
+            # game.insert({'name': name,
+            #             'score': 0})
             multiplayers[id-1].set_name(name)
             print('Names after first name entry..')
             print(names)
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
-            names.append(name)
-            player2 = mongo.db.players
-            player2.insert({'name': name,
-                            'score': 0})
+            # names.append(name)
             multiplayers[id-1].set_name(name)
             rand_week = random.randrange(38)
             print('Names after second name entry..')
@@ -136,7 +135,7 @@ def multiplayer(id, p_num, attempt, week):
     print(multiplayers[1].get_name())
     name1 = multiplayers[0].get_name()
     name2 = multiplayers[1].get_name()
-    names = [name1, name2]
+    names = ['Kim', 'Kate']
     form = AnswerForm()
     fix_list = init_game(week)
     # name = multiplayers[int(p_num) -1].get_name()
@@ -232,7 +231,6 @@ def winnermult():
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 def leaderboard():
-    # updated_highscores = get_highscores()
     updated_highscores = get_scores(mongo)
     sorted_highscores = sorted(updated_highscores, key=lambda item: item['score'], reverse=True)
     top_ten = sorted_highscores[0:10]
