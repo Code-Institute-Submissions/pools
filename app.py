@@ -118,11 +118,9 @@ def game(id, name, score, attempt, week):
 def multiplayer(id, p_num, attempt, week, name_1, score_a, name_2, score_b):
     player1 = Player(name=name_1)
     player2 = Player(name=name_2)
-    print(player1.get_name())
-    print(player2.get_name())
     nm1 = player1.get_name()
-    nm2 = player1.get_name()
-    names = ['Bill', 'Ted']
+    nm2 = player2.get_name()
+    names = [nm1, nm2]
     multiplayers = [player1, player2]
     form = AnswerForm()
     fix_list = init_game(week)
@@ -215,7 +213,9 @@ def winnermult(name_1, score_a, name_2, score_b):
     player2 = Player(name=name_2)
     player1.set_score(score_a)
     player2.set_score(score_b)
-    names = ['Bill', 'Ted']
+    nm1 = player1.get_name()
+    nm2 = player2.get_name()
+    names = [nm1, nm2]
     scores = [score_a, score_b]
     multiplayers = [player1, player2]
     multiplayers.sort(key=lambda x: x.score, reverse=True)
