@@ -51,6 +51,9 @@ class Player:
     def set_name(self, nm):
         self.name = nm
 
+    def set_score(self, sc):
+        self.score = sc
+
     def get_name(self):
         return self.name
 

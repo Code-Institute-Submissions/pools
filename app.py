@@ -17,11 +17,10 @@ app.config['MONGO_URI'] = 'mongodb://roykeane:roykeane16@ds251284.mlab.com:51284
 mongo = PyMongo(app)
 
 
-player1 = Player()
-player2 = Player()
-names = ['Kim', 'Kate']
-multiplayers = [player1, player2]
-# highscores = get_highscores()
+# player1 = Player()
+# player2 = Player()
+# names = ['Kim', 'Kate']
+# multiplayers = [player1, player2]
 highscores = get_scores(mongo)
 
 
@@ -42,7 +41,7 @@ def newgame():
     if form.validate_on_submit():
         num_players = int(form.players.data)
         flash(f'{num_players} player game created!', 'dark')
-        return redirect(url_for('enternames', id=1, num_players=num_players))
+        return redirect(url_for('enternames', id=1, num_players=num_players, name1='name1', name2='name2'))
     with open('player_Names.txt', 'r+') as f:
         f.truncate(0)
     return render_template('newgame.html', title='newgame', form=form )
@@ -50,8 +49,8 @@ def newgame():
 
 
 
-@app.route("/enternames/<int:id>/<int:num_players>", methods=['GET', 'POST'])
-def enternames(id, num_players):
+@app.route("/enternames/<int:id>/<int:num_players>/<name1>/<name2>", methods=['GET', 'POST'])
+def enternames(id, num_players, name1, name2):
     form = NameForm()
     if form.validate_on_submit():
         name = form.playername.data
@@ -60,24 +59,11 @@ def enternames(id, num_players):
             rand_week = random.randrange(38)
             return redirect(url_for('game', id=1, name=name, score=0, attempt=1, week=rand_week))
         if id < num_players:
-            # names.append(name)
-            # game = mongo.db.game
-            # player1 = mongo.db.players
-            # player1.insert({'name': name,
-            #                 'score': 0})
-            # game.insert({'name': name,
-            #             'score': 0})
-            multiplayers[id-1].set_name(name)
-            print('Names after first name entry..')
-            print(names)
-            return redirect(url_for('enternames', id=id+1, num_players=num_players))
+            return redirect(url_for('enternames', id=id+1, num_players=num_players, name1=name, name2=name2))
         elif id == num_players:
-            # names.append(name)
-            multiplayers[id-1].set_name(name)
+            name_2=name
             rand_week = random.randrange(38)
-            print('Names after second name entry..')
-            print(names)
-            return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1, week=rand_week))
+            return redirect(url_for('multiplayer', id=1, p_num=1, attempt=1, week=rand_week, name_1=name1, score_a=0, name_2=name_2, score_b=0))
     return render_template('enternames.html', form=form, id=id, num_players=num_players)
 
 
@@ -89,7 +75,7 @@ def game(id, name, score, attempt, week):
     fix_list = init_game(week)
     if form.validate_on_submit():
         name = name
-        session['player'] = name
+        # session['player'] = name
         plr_answer = form.answer.data
         currId = id
         correct_result = get_correct_result(currId, fix_list)
@@ -128,21 +114,20 @@ def game(id, name, score, attempt, week):
 
 
 
-@app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>/<int:week>", methods=['GET', 'POST'])
-def multiplayer(id, p_num, attempt, week):
-    print(multiplayers)
-    print(multiplayers[0].get_name())
-    print(multiplayers[1].get_name())
-    name1 = multiplayers[0].get_name()
-    name2 = multiplayers[1].get_name()
-    names = ['Kim', 'Kate']
+@app.route("/multiplayer/<int:id>/<int:p_num>/<int:attempt>/<int:week>/<name_1>/<int:score_a>/<name_2>/<int:score_b>", methods=['GET', 'POST'])
+def multiplayer(id, p_num, attempt, week, name_1, score_a, name_2, score_b):
+    player1 = Player(name=name_1)
+    player2 = Player(name=name_2)
+    print(player1.get_name())
+    print(player2.get_name())
+    nm1 = player1.get_name()
+    nm2 = player1.get_name()
+    names = ['Bill', 'Ted']
+    multiplayers = [player1, player2]
     form = AnswerForm()
     fix_list = init_game(week)
-    # name = multiplayers[int(p_num) -1].get_name()
     if form.validate_on_submit():
         plr_answer = form.answer.data
-        # name = multiplayers[int(p_num) -1].get_name()
-        # print(name)
         count = 2
         currId = id
         correct_result = get_correct_result(currId, fix_list)
@@ -154,56 +139,60 @@ def multiplayer(id, p_num, attempt, week):
                 if attempt == 1:
                     if plr_answer != correct_result:
                         flash(f'Wrong answer {names[p_num-1]}, you have one more attempt', 'dark')
-                        return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week))
+                        return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week, name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b))
                     else:
                         multiplayers[p_num-1].inc_score(1, plr_answer)
-                        return redirect(url_for('winnermult'))
+                        return redirect(url_for('winnermult', name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b+plr_answer))
                 elif attempt == 2:
                     if plr_answer != correct_result:
-                        return redirect(url_for('winnermult'))
+                        return redirect(url_for('winnermult', name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b))
                     else:
                         multiplayers[p_num-1].inc_score(2, plr_answer)
-                        return redirect(url_for('winnermult'))
+                        return redirect(url_for('winnermult', name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b+1))
             # if last player in a Question
             elif p_num == count:
                 if attempt == 1:
                     if plr_answer != correct_result:
                         flash(f'Wrong answer {names[p_num-1]}, you have one more attempt', 'dark')
-                        return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week, name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b))
                     else:
                         flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(1, plr_answer)
-                        return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week, name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b+plr_answer))
                 elif attempt == 2:
                     if plr_answer != correct_result:
                         flash(f'Wrong answer {names[p_num-1]}', 'dark')
-                        return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week, name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b))
                     else:
                         flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(2, plr_answer)
-                        return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id+1, p_num=1, attempt=1, week=week, name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b+1))
             # fixture 1 to 9 all players excluding last player
             elif p_num < count:
                 if attempt == 1:
                     if plr_answer != correct_result:
-                        print(p_num)
                         flash(f'Wrong answer {names[p_num-1]}, you have one more attempt', 'dark')
-                        return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id, p_num=p_num, attempt=2, week=week, name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b))
                     else:
-                        print(p_num)
                         flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(1, plr_answer)
-                        return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week, name_1=name_1, score_a=score_a+plr_answer, name_2=name_2, score_b=score_b))
                 elif attempt == 2:
-                    print(p_num)
                     if plr_answer != correct_result:
                         flash(f'Wrong answer {names[p_num-1]}', 'dark')
-                        return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week, name_1=name_1, score_a=score_a, name_2=name_2, score_b=score_b))
                     else:
-                        print(p_num)
                         flash(f'You are correct {names[p_num-1]}', 'success')
                         multiplayers[p_num-1].inc_score(2, plr_answer)
-                        return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week))
+                        print(multiplayers[p_num -1].get_score())
+                        return redirect(url_for('multiplayer', id=id, p_num=p_num+1, attempt=1, week=week, name_1=name_1, score_a=score_a+1, name_2=name_2, score_b=score_b))
     return render_template('multiplayer.html', form=form,
                                    id=id, fix_list=fix_list, p_num=p_num, multiplayers=multiplayers, names=names, week=week)
 
@@ -220,12 +209,19 @@ def winner(name, score):
 
 
 
-@app.route("/winnermult", methods=['GET', 'POST'])
-def winnermult():
+@app.route("/winnermult/<name_1>/<int:score_a>/<name_2>/<int:score_b>", methods=['GET', 'POST'])
+def winnermult(name_1, score_a, name_2, score_b):
+    player1 = Player(name=name_1)
+    player2 = Player(name=name_2)
+    player1.set_score(score_a)
+    player2.set_score(score_b)
+    names = ['Bill', 'Ted']
+    scores = [score_a, score_b]
+    multiplayers = [player1, player2]
     multiplayers.sort(key=lambda x: x.score, reverse=True)
     if len(multiplayers) > 1:
         calc_winner(multiplayers[0], multiplayers[1])
-    return render_template('winnermult.html', multiplayers=multiplayers, calc_winner=calc_winner, highscores=highscores, names=names)
+    return render_template('winnermult.html', multiplayers=multiplayers, calc_winner=calc_winner, highscores=highscores, names=names, scores=scores)
 
 
 
