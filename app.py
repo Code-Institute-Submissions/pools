@@ -16,19 +16,17 @@ app.config['MONGO_URI'] = 'mongodb://roykeane:roykeane16@ds251284.mlab.com:51284
 
 mongo = PyMongo(app)
 
-
-# player1 = Player()
-# player2 = Player()
-# names = ['Kim', 'Kate']
-# multiplayers = [player1, player2]
 highscores = get_scores(mongo)
-
 
 
 
 @app.route("/")
 @app.route("/home")
 def home():
+    if session:
+        session.clear()
+    print('The session is')
+    print(session)
     return render_template('home.html')
 
 
@@ -36,14 +34,13 @@ def home():
 
 @app.route("/newgame", methods=['GET', 'POST'])
 def newgame():
-    # session.pop('player', None)
+    session = { 'id': 1, 'players': 0, 'name': 'Joe', 'score': 0, 'attempt': 1, 'week': 0 }
     form = PlayerNumForm()
     if form.validate_on_submit():
         num_players = int(form.players.data)
+        session['players'] = num_players
         flash(f'{num_players} player game created!', 'dark')
         return redirect(url_for('enternames', id=1, num_players=num_players, name1='name1', name2='name2'))
-    with open('player_Names.txt', 'r+') as f:
-        f.truncate(0)
     return render_template('newgame.html', title='newgame', form=form )
 
 
@@ -56,8 +53,11 @@ def enternames(id, num_players, name1, name2):
         name = form.playername.data
         flash(f'Good luck {name}!! ', 'dark')
         if num_players == 1:
+            session['name'] = name
             rand_week = random.randrange(38)
-            return redirect(url_for('game', id=1, name=name, score=0, attempt=1, week=rand_week))
+            session['week'] = rand_week
+            session['id'] = 1
+            return redirect(url_for('game', id=1, score=0, attempt=1, week=rand_week))
         if id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players, name1=name, name2=name2))
         elif id == num_players:
@@ -69,13 +69,17 @@ def enternames(id, num_players, name1, name2):
 
 
 
-@app.route("/game/<int:id>/<name>/<int:score>/<int:attempt>/<int:week>", methods=['GET', 'POST'])
-def game(id, name, score, attempt, week):
+@app.route("/game/<int:id>/<int:score>/<int:attempt>/<int:week>", methods=['GET', 'POST'])
+def game(id, score, attempt, week):
     form = AnswerForm()
     fix_list = init_game(week)
+    print('The session is')
+    print(session)
+    name = session['name']
+    # if session['name'] != name:
+    #     return redirect(url_for('home'))
     if form.validate_on_submit():
-        name = name
-        # session['player'] = name
+        # name = name
         plr_answer = form.answer.data
         currId = id
         correct_result = get_correct_result(currId, fix_list)
@@ -83,22 +87,22 @@ def game(id, name, score, attempt, week):
             if attempt == 1:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=id, name=name, score=score, attempt=2, week=week))
+                    return redirect(url_for('game', id=id, score=score, attempt=2, week=week))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, name=name, score=score+plr_answer, attempt=1, week=week))
+                    return redirect(url_for('game', id=id+1, score=score+plr_answer, attempt=1, week=week))
             elif attempt == 2:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}', 'dark')
-                    return redirect(url_for('game', id=id+1, name=name, score=score, attempt=1, week=week))
+                    return redirect(url_for('game', id=id+1, score=score, attempt=1, week=week))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, name=name, score=score+1, attempt=1, week=week))
+                    return redirect(url_for('game', id=id+1, score=score+1, attempt=1, week=week))
         elif id == 10:
             if attempt == 1:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=10, name=name, score=score, attempt=2, week=week))
+                    return redirect(url_for('game', id=10, score=score, attempt=2, week=week))
                 else:
                     score = score + plr_answer
                     return redirect(url_for('winner', name=name, score=score))
