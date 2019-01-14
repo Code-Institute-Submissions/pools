@@ -56,7 +56,7 @@ def enternames(id, num_players, name1, name2):
             session['week'] = rand_week
             session['id'] = 1
             session['score'] = 0
-            return redirect(url_for('game', id=1, attempt=1, week=rand_week))
+            return redirect(url_for('game', id=1, attempt=1))
         if id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players, name1=name, name2=name2))
         elif id == num_players:
@@ -68,12 +68,13 @@ def enternames(id, num_players, name1, name2):
 
 
 
-@app.route("/game/<int:id>/<int:attempt>/<int:week>", methods=['GET', 'POST'])
-def game(id, attempt, week):
+@app.route("/game/<int:id>/<int:attempt>", methods=['GET', 'POST'])
+def game(id, attempt):
     form = AnswerForm()
+    week = session['week']
     fix_list = init_game(week)
     name = session['name']
-    score = session['score']
+    score = session['score']    
     if form.validate_on_submit():
         plr_answer = form.answer.data
         currId = id
@@ -82,24 +83,24 @@ def game(id, attempt, week):
             if attempt == 1:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=id, attempt=2, week=week))
+                    return redirect(url_for('game', id=id, attempt=2))
                 else:
                     flash(f'You are correct {name}', 'success')
                     session['score'] = session['score'] + plr_answer
-                    return redirect(url_for('game', id=id+1, attempt=1, week=week))
+                    return redirect(url_for('game', id=id+1, attempt=1))
             elif attempt == 2:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}', 'dark')
-                    return redirect(url_for('game', id=id+1, attempt=1, week=week))
+                    return redirect(url_for('game', id=id+1, attempt=1))
                 else:
                     flash(f'You are correct {name}', 'success')
                     session['score'] = session['score'] + 1
-                    return redirect(url_for('game', id=id+1, attempt=1, week=week))
+                    return redirect(url_for('game', id=id+1, attempt=1))
         elif id == 10:
             if attempt == 1:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=10, attempt=2, week=week))
+                    return redirect(url_for('game', id=10, attempt=2))
                 else:
                     score = score + plr_answer
                     return redirect(url_for('winner'))
