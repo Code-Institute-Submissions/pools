@@ -25,8 +25,6 @@ highscores = get_scores(mongo)
 def home():
     if session:
         session.clear()
-    print('The session is')
-    print(session)
     return render_template('home.html')
 
 
@@ -57,7 +55,8 @@ def enternames(id, num_players, name1, name2):
             rand_week = random.randrange(38)
             session['week'] = rand_week
             session['id'] = 1
-            return redirect(url_for('game', id=1, score=0, attempt=1, week=rand_week))
+            session['score'] = 0
+            return redirect(url_for('game', id=1, attempt=1, week=rand_week))
         if id < num_players:
             return redirect(url_for('enternames', id=id+1, num_players=num_players, name1=name, name2=name2))
         elif id == num_players:
@@ -69,17 +68,13 @@ def enternames(id, num_players, name1, name2):
 
 
 
-@app.route("/game/<int:id>/<int:score>/<int:attempt>/<int:week>", methods=['GET', 'POST'])
-def game(id, score, attempt, week):
+@app.route("/game/<int:id>/<int:attempt>/<int:week>", methods=['GET', 'POST'])
+def game(id, attempt, week):
     form = AnswerForm()
     fix_list = init_game(week)
-    print('The session is')
-    print(session)
     name = session['name']
-    # if session['name'] != name:
-    #     return redirect(url_for('home'))
+    score = session['score']
     if form.validate_on_submit():
-        # name = name
         plr_answer = form.answer.data
         currId = id
         correct_result = get_correct_result(currId, fix_list)
@@ -87,31 +82,33 @@ def game(id, score, attempt, week):
             if attempt == 1:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=id, score=score, attempt=2, week=week))
+                    return redirect(url_for('game', id=id, attempt=2, week=week))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, score=score+plr_answer, attempt=1, week=week))
+                    session['score'] = session['score'] + plr_answer
+                    return redirect(url_for('game', id=id+1, attempt=1, week=week))
             elif attempt == 2:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}', 'dark')
-                    return redirect(url_for('game', id=id+1, score=score, attempt=1, week=week))
+                    return redirect(url_for('game', id=id+1, attempt=1, week=week))
                 else:
                     flash(f'You are correct {name}', 'success')
-                    return redirect(url_for('game', id=id+1, score=score+1, attempt=1, week=week))
+                    session['score'] = session['score'] + 1
+                    return redirect(url_for('game', id=id+1, attempt=1, week=week))
         elif id == 10:
             if attempt == 1:
                 if plr_answer != correct_result:
                     flash(f'Wrong answer {name}, you have one more attempt', 'dark')
-                    return redirect(url_for('game', id=10, score=score, attempt=2, week=week))
+                    return redirect(url_for('game', id=10, attempt=2, week=week))
                 else:
                     score = score + plr_answer
-                    return redirect(url_for('winner', name=name, score=score))
+                    return redirect(url_for('winner'))
             if attempt == 2:
                 if plr_answer != correct_result:
-                    return redirect(url_for('winner', name=name, score=score))
+                    return redirect(url_for('winner'))
                 else:
-                    score = score +1
-                    return redirect(url_for('winner', name=name, score=score))
+                    session['score'] = session['score'] + 1
+                    return redirect(url_for('winner'))
     return render_template('game.html', form=form,
                                    id=id, fix_list=fix_list, name=name, week=week)
 
@@ -200,10 +197,10 @@ def multiplayer(id, p_num, attempt, week, name_1, score_a, name_2, score_b):
 
 
 
-@app.route("/winner/<string:name>/<int:score>", methods=['GET', 'POST'])
-def winner(name, score):
-    name = name
-    score = score
+@app.route("/winner", methods=['GET', 'POST'])
+def winner():
+    name = session['name']
+    score = session['score']
     scores_table = mongo.db.scores_table
     scores_table.insert({'name': name,
                     'score': score})
