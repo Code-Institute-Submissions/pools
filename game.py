@@ -3,8 +3,6 @@ import json
 import random
 
 
-
-
 class Question:
     def __init__(self, home, away, result):
         """
@@ -62,6 +60,7 @@ class Player:
 
 
 
+
 class Open_File():
     def __init__(self, filename, mode):
         """
@@ -79,24 +78,6 @@ class Open_File():
 
 
 
-def create_player_list():
-    """
-    Function to open txt file containing names, make list of player objects
-    """
-    with open ('player_Names.txt', 'r') as f:
-        list = []
-        for name in f:
-            player = Player(name)
-            list.append(player)
-    return list
-
-
-
-def get_player_name(list, num):
-    name = list[num].name
-    return name
-
-
 
 def calc_winner(playerA, playerB):
     """
@@ -112,38 +93,10 @@ def calc_winner(playerA, playerB):
 
 
 
-def add_to_highscores():
-    """ read last line of scores.txt and add to highscores array """
-    with open('scores.txt', 'r') as f:
-        player = {}
-        last_line = f.readlines()[-1]
-        name, score = last_line.split(':')
-        player['name'] = name
-        player['score'] = score
-        highscores.append(player)
-
-
-
-def get_highscores():
-    """
-    function to extract scores from scores.txt and
-    create dictionary of highscore player objects
-    """
-    highscores = []
-    with open('scores.txt', 'r') as f:
-        for line in f:
-            player = {}
-            name, score = line.split(':')
-            player['name'] = name
-            player['score'] = int(score)
-            highscores.append(player)
-    return highscores
-
-
 
 def get_scores(store):
     """
-    function to extract scores from scores.txt and
+    function to extract scores from mongo db and
     create dictionary of highscore player objects
     """
     scores = []
@@ -158,6 +111,7 @@ def get_scores(store):
         player['score'] = int(score)
         scores.append(player)
     return scores
+
 
 
 
@@ -177,6 +131,7 @@ def get_rand_match_week(num):
 
 
 
+
 def create_fixtures(obj):
     """ create fixtures from extracted matchweek """
     gList = []
@@ -193,16 +148,12 @@ def create_fixtures(obj):
 
 
 
+
 def get_correct_result(num, list):
     currentGame = num-1
     result = list[currentGame]['result']
     return result
 
-
-def multi(list, id, name):
-    list[id].name = name
-    print('multi ran')
-    return list
 
 
 

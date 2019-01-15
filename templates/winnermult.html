@@ -6,7 +6,7 @@
       {% for player in range(multiplayers |length) %}
         <p class="result">{{ names[player] }} you scored {{ scores[player] }} points!</p>
         <div class="progress">
-          <div class="progress-bar bg-success" role="progressbar" style="width: {{ multiplayers[player].score * 5 }}%" aria-valuenow="{{ multiplayers[player].score }}" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-success" role="progressbar" style="width: {{ multiplayers[player].get_score() * 5 }}%" aria-valuenow="{{ multiplayers[player].score }}" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
       {% endfor %}
       {% if multiplayers |length > 1 %}
