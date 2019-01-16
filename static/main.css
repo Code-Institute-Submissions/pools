@@ -139,7 +139,11 @@ body {
     font-size: 1.2rem;
   }
 
-  .week, .entername {
+  .week{
+    font-size: 1rem;
+  }
+
+  .entername {
     font-size: 1rem;
   }
 }
