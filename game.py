@@ -27,7 +27,7 @@ class Question:
 class Player:
     def __init__(self, name='', score=0, answer=0):
         """
-        Player class for creating instance of a player with a name and their scored
+        Player class for creating instance of a player with a name and their score
         """
         self.name = name
         self.score = score
@@ -104,7 +104,6 @@ def get_scores(store):
     all_scores = scores_table.find()
     for record in all_scores:
         player = {}
-        # name, score = line.split(':')
         name = record['name']
         score = record['score']
         player['name'] = name
@@ -117,7 +116,7 @@ def get_scores(store):
 
 def get_rand_match_week(num):
     """
-    get random matchweek object from json stripped file, contains 10 fixtures
+    get random matchweek object from json season, contains 10 fixtures
     """
     randomWeek = 0
     with open('38_week_season_results.json') as f:
@@ -132,19 +131,19 @@ def get_rand_match_week(num):
 
 
 
-def create_fixtures(obj):
+def create_fixtures(list):
     """ create fixtures from extracted matchweek """
-    gList = []
-    for game in obj:
+    game_list = []
+    for game in list:
         home = game['team1']['name']
         away = game['team2']['name']
         result = game['result']
         question = Question(home, away, result)
         fixture = question.fixture()
-        gameDict = {'fixture': fixture,
+        game_obj = {'fixture': fixture,
                     'result': result}
-        gList.append(gameDict)
-    return gList
+        game_list.append(game_obj)
+    return game_list
 
 
 
@@ -163,7 +162,3 @@ def init_game(num):
     list = fixtures
     print('init game ran')
     return list
-
-
-def reset_highscores(list):
-    del list[:]

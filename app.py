@@ -4,7 +4,7 @@ import random
 from flask import Flask, render_template, url_for, flash, redirect, session, escape, request
 from flask_pymongo import PyMongo
 from forms import PlayerNumForm, NameForm, AnswerForm
-from game import Question, Player, calc_winner, get_rand_match_week, create_fixtures, get_correct_result, init_game, reset_highscores, get_scores
+from game import Question, Player, calc_winner, get_rand_match_week, create_fixtures, get_correct_result, init_game, get_scores
 
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ def home():
 
 
 @app.route("/newgame", methods=['GET', 'POST'])
-def newgame():    
+def newgame():
     form = PlayerNumForm()
     if form.validate_on_submit():
         num_players = int(form.players.data)
@@ -61,7 +61,6 @@ def enternames(id, num_players):
             return redirect(url_for('enternames', id=id+1, num_players=num_players))
         elif id == num_players:
             session['name_2'] = name
-            # name_2=name
             rand_week = random.randrange(38)
             session['week'] = rand_week
             session['score_a'] = 0
@@ -213,9 +212,7 @@ def winnermult():
     score_b = session['score_b']
     player1.set_score(score_a)
     player2.set_score(score_b)
-    nm1 = player1.get_name()
-    nm2 = player2.get_name()
-    names = [nm1, nm2]
+    names = [name_1, name_2]
     scores = [score_a, score_b]
     multiplayers = [player1, player2]
     multiplayers.sort(key=lambda x: x.score, reverse=True)
@@ -243,4 +240,4 @@ def rules():
 if __name__ == '__main__':
     app.run(host = os.environ.get("IP"),
             port = int(os.environ.get("PORT", 5000)),
-            debug = True, use_reloader=False)
+            debug = False, use_reloader=False)
