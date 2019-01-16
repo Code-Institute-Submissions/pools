@@ -1,15 +1,10 @@
 :root {
   --kick-off-green: #06a84c;
   --text-green: #51674b;
-  --prem-purple: #2f1167;
 }
 
-.purp {
-  color: var(--prem-purple);
-}
 
 body {
-  /* background: #fafafa; */
   margin-top: 5rem;
   font-family: 'Ubuntu', sans-serif;
 }
@@ -123,8 +118,6 @@ body {
 
 
 
-
-
 .backgroundd {
     /* The image used */
     background: url('../static/img/sunset.jpeg');
@@ -136,4 +129,17 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+
+/* Small screens */
+
+@media screen and (max-width: 500px) {
+  .fixture, .player, .game {
+    font-size: 1.2rem;
+  }
+
+  .week {
+    font-size: 1rem;
+  }
 }
